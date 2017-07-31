@@ -1,8 +1,10 @@
 //logs.js
 var util = require('../../utils/util.js')
+var app=getApp()
 Page({
   data: {
-    logs: []
+    logs: [],
+    token:app.globalData.userToken
   },
   onLoad: function () {
     this.setData({
