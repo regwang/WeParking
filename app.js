@@ -6,7 +6,22 @@ App({
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs)
   },
+  onShow: function(){
+    wx.checkSession({
+      success:function(){
 
+      },
+      fail:function(){
+        wx.login({
+          success:function(res){
+            if(res.code){
+              console.log(res.code);
+            }
+          }
+        })
+      }
+    })
+  },
   getUserInfo: function(cb) {
     var that = this
     if (this.globalData.userInfo) {
