@@ -6,34 +6,49 @@ App({
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs)
     var that=this
-    wx.checkSession({
-      success:function(){
-        console.log("islogin")
-      },
-      fail:function(){
-        wx.login({
-          success:function(res){
-            console.log(res.code)
-            if(res.code){
-              wx.request({
-                url: that.globalData.serverUrl+'onLogin.als',
-                data:{code:res.code},
-                success:function(res2){
-                  if(res2.data.status==0){
-                    wx.setStorage({
-                      key: 'token',
-                      data: res2.data.token,
-                    })
-                  }
-                }
-              })
+    var hasToken=true
+    try{
+      var value = wx.getStorageSync('token')
+      if (!value) {
+        hasToken=false
+      }
+    }catch(e){}
+    if(hasToken){
+      wx.checkSession({
+        success: function () {
+          console.log('islogin')
+        },
+        fail: function () {
+            console.log('notlogin')
+            that.doLogin()
+        }
+      })
+    }else{
+      that.doLogin()
+    }
+    
+  },
+  doLogin:function(){
+    var that=this
+    wx.login({
+      success: function (res) {
+        console.log('js_code:'+res.code)
+        if (res.code) {
+          wx.request({
+            url: that.globalData.serverUrl + 'onLogin.als',
+            data: { code: res.code },
+            success: function (res2) {
+              if (res2.data.status == 0) {
+                try{
+                  wx.setStorageSync('token',res2.data.token)
+                }catch (e) {}
+              }
             }
-          }
-        })
+          })
+        }
       }
     })
   },
-  
   getUserInfo: function(cb) {
     var that = this
     if (this.globalData.userInfo) {
