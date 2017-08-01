@@ -6,30 +6,32 @@ App({
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs)
     var that=this
-    // wx.checkSession({
-    //   success:function(){
-    //     console.log("islogin")
-    //   },
-    //   fail:function(){
+    wx.checkSession({
+      success:function(){
+        console.log("islogin")
+      },
+      fail:function(){
         wx.login({
           success:function(res){
             console.log(res.code)
             if(res.code){
               wx.request({
                 url: that.globalData.serverUrl+'onLogin.als',
-                data:{code:"lijw"},
+                data:{code:res.code},
                 success:function(res2){
-                  console.log(res2.data)
-                  if(res2.data.status=="0"){
-                    that.globalData.userToken=res2.data.token
+                  if(res2.data.status==0){
+                    wx.setStorage({
+                      key: 'token',
+                      data: res2.data.token,
+                    })
                   }
                 }
               })
             }
           }
         })
-      // }
-    // })
+      }
+    })
   },
   
   getUserInfo: function(cb) {
@@ -50,7 +52,6 @@ App({
 
   globalData: {
     userInfo: null,
-    serverUrl:"https://www.rankyoo.com/srimplApp/",
-    userToken:null
+    serverUrl:"https://www.rankyoo.com/srimplApp/"
   }
 })

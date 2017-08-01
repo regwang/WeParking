@@ -3,5 +3,6 @@
   <block wx:for="{{logs}}" wx:for-item="log" wx:key="*this">
     <text class="log-item">{{index + 1}}. {{log}}</text>
   </block>
-  <text>{{token}}</text>
+  <text>{{test}}</text>
+  <text>token:{{token}}</text>
 </view>
