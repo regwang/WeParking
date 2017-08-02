@@ -1,0 +1,9 @@
+<!--bindPhone.wxml-->
+<view class="phone_area">
+  <view class="phone">
+    <text class="phone_text">手机号码</text>
+    <input class="phone_input" placeholder="填写手机号码" placeholder-class="place_holder_size" maxlength="11" type="number" />
+    <button>验证码</button>
+  </view>
+  <view class="line"></view>
+</view>

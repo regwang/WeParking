@@ -1,12 +1,14 @@
 {
-  "pages":[
+  "pages": [
     "pages/index/index",
-    "pages/logs/logs"
+    "pages/logs/logs",
+    "pages/bindPhone/bindPhone"
   ],
-  "window":{
-    "backgroundTextStyle":"light",
+  "window": {
+    "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#000000",
     "navigationBarTitleText": "闪泊停车",
-    "navigationBarTextStyle":"white"
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#ffffff"
   }
 }
