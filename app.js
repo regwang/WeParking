@@ -38,12 +38,30 @@ App({
             url: that.globalData.serverUrl + 'onLogin.als',
             data: { code: res.code },
             success: function (res2) {
+              console.log('res2:'+res2.data)
               if (res2.data.status == 0) {
                 try{
                   wx.setStorageSync('token',res2.data.token)
+                  that.getUserInfo(function(userInfo){
+                      that.updateUserInfo(userInfo)
+                  })
                 }catch (e) {}
               }
             }
+          })
+        }
+      }
+    })
+  },
+  updateUserInfo:function(userInfo){
+    var that=this
+    wx.request({
+      url: that.globalData.serverUrl+'updateNick.als',
+      data:{token:wx.getStorageSync('token'),nickName:userInfo.nickName},
+      success:function(res){
+        if(res.data.status==-1){
+          wx.showToast({
+            title: '获取用户信息失败',
           })
         }
       }
