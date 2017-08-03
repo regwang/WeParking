@@ -5,62 +5,53 @@ Page({
    * 页面的初始数据
    */
   data: {
-  
+    codeDisable:true,
+    signupDisable:true,
+    phoneValue:"",
+    codeValue:"",
+    sendCodeText:"验证码"
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-  
+  getPhone:function(e){
+    this.setData({
+      codeDisable: true,
+      phoneValue:""
+    })
+    var s=e.detail.value
+    if(s!=null) {
+      var length = s.length;
+      if(length==11){
+        if (/^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1})|(17[0-9]{1})|(14[0-9]{1})|)+\d{8})$/.test(s)){
+          this.setData({
+            codeDisable:false,
+            phoneValue:s
+          })
+        }else{
+          wx.showToast({
+            title: '手机号不正确',
+          })
+        }
+      }
+    }
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-  
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-  
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-  
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-  
+  sendCode:function(){
+    var times=60;
+    var that=this
+    that.setData({
+      codeDisable: true
+    })
+    setInterval(function(){
+      if(times>1){
+        that.setData({
+          sendCodeText:--times,
+          codeDisable:true
+        })
+      }else{
+        that.setData({
+          sendCodeText:"验证码",
+          codeDisable: false
+        })
+        return
+      }
+    },1000)
   }
 })
