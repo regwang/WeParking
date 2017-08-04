@@ -22,5 +22,22 @@ Page({
         userInfo:userInfo
       })
     })
+  },
+  onShow:function(){
+    wx.showLoading({
+      title: '加载中..'
+    })
+    wx.request({
+      url: app.globalData.serverUrl +'getUserBookingStatus.als',
+      success:function(res){
+        console.log(res.data)
+        wx.hideLoading();
+        if(res.data.status==1){
+          wx.redirectTo({
+            url: '/pages/bindPhone/bindPhone',
+          })
+        }
+      }
+    })
   }
 })

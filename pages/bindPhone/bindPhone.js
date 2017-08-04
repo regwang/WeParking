@@ -9,7 +9,9 @@ Page({
     signupDisable:true,
     phoneValue:"",
     codeValue:"",
-    sendCodeText:"验证码"
+    sendCodeText:"验证码",
+    isSend:false,
+    isChecked:true
   },
   getPhone:function(e){
     this.setData({
@@ -33,25 +35,64 @@ Page({
       }
     }
   },
+  getCode:function(e){
+    var s=e.detail.value
+    if(s.length>=4&&this.data.isSend){
+      this.setData({
+        codeValue:s
+      })
+    }else{
+      this.setData({
+        codeValue:""
+      })
+    }
+    this.signupStatus()
+  },
+  checkboxChange:function(e){
+    var result=false
+    if(e.detail.value.length==1){
+      result=true
+    }
+    this.setData({
+      isChecked:result
+    })
+    this.signupStatus()
+  },
+  signupStatus:function(){
+    var result=true;
+    if(this.data.phoneValue.length>0&&this.data.codeValue.length>0&&this.data.isChecked){
+      result=false
+    }
+    this.setData({
+      signupDisable:result
+    })
+  },
   sendCode:function(){
-    var times=60;
-    var that=this
+    //发送验证码
+    this.setData({
+      isSend:true
+    })
+    this.countDown()
+  },
+  countDown:function(){
+    var times = 60;
+    var that = this
     that.setData({
       codeDisable: true
     })
-    setInterval(function(){
-      if(times>1){
+    var flag = setInterval(function () {
+      if (times > 1) {
         that.setData({
-          sendCodeText:--times,
-          codeDisable:true
+          sendCodeText: --times,
+          codeDisable: true
         })
-      }else{
+      } else {
+        clearInterval(flag)
         that.setData({
-          sendCodeText:"验证码",
+          sendCodeText: "验证码",
           codeDisable: false
         })
-        return
       }
-    },1000)
+    }, 1000)
   }
 })

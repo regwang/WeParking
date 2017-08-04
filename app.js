@@ -85,6 +85,6 @@ App({
 
   globalData: {
     userInfo: null,
-    serverUrl:"https://www.rankyoo.com/srimplApp/"
+    serverUrl:"https://www.rankyoo.com/srimplApp/",
   }
 })
