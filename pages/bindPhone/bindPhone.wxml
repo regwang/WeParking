@@ -1,4 +1,5 @@
 <!--bindPhone.wxml-->
+<import src="/pages/wetoast/wetoast.wxml"/>
 <view class="page_order">
   <view class="phone_area">
     <view class="phone">
@@ -20,6 +21,8 @@
       <text class="main_text agreement_text">《用户注册协议》</text>
   </view>
   <view class="signup_area">
-    <button disabled="{{signupDisable}}" size="default" type="primary" style="background-color:#f4c600">完成</button>
+    <button disabled="{{signupDisable}}" bindtap="signup" size="default" type="primary" style="background-color:#f4c600">完成</button>
   </view>
 </view>
+<template is="wetoast" data="{{...__wetoast__}}"/>
+

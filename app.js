@@ -1,5 +1,7 @@
 //app.js
+var WeToast=require('/pages/wetoast/wetoast.js')  
 App({
+  WeToast,
   onLaunch: function() {
     //调用API从本地缓存中获取数据
     var logs = wx.getStorageSync('logs') || []
@@ -38,7 +40,6 @@ App({
             url: that.globalData.serverUrl + 'onLogin.als',
             data: { code: res.code },
             success: function (res2) {
-              console.log('res2:'+res2.data)
               if (res2.data.status == 0) {
                 try{
                   wx.setStorageSync('token',res2.data.token)

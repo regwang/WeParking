@@ -1,4 +1,7 @@
 // bindPhone.js
+
+var app=getApp()
+
 Page({
 
   /**
@@ -12,6 +15,9 @@ Page({
     sendCodeText:"验证码",
     isSend:false,
     isChecked:true
+  },
+  onLoad: function () {
+    new app.WeToast.WeToast()
   },
   getPhone:function(e){
     this.setData({
@@ -28,9 +34,10 @@ Page({
             phoneValue:s
           })
         }else{
-          wx.showToast({
-            title: '手机号不正确',
+          this.wetoast.toast({
+            title:'手机号不正确!'
           })
+
         }
       }
     }
@@ -67,8 +74,47 @@ Page({
       signupDisable:result
     })
   },
+  signup:function(){
+    var that=this
+    wx.showLoading({
+      title: '绑定手机..',
+    })
+    wx.request({
+      url: app.globalData.serverUrl + 'bindPhone.als',
+      data: { token: wx.getStorageSync('token'), code: that.data.codeValue },
+      success: function (res) {
+        wx.hideLoading()
+        console.log(res.data)
+        if (res.data.status ==0){
+          wx.redirectTo({
+            url: '/pages/index/index',
+          })
+        }else if(res.data.status==-1){
+          that.wetoast.toast({
+            title:'验证码错误!'
+          })
+        }else{
+          that.wetoast.toast({
+            title:'系统错误!'
+          })
+        }
+      }
+    })
+  },
   sendCode:function(){
-    //发送验证码
+    var that=this
+    wx.request({
+      url: app.globalData.serverUrl+'sendSMS.als',
+      data:{token:wx.getStorageSync('token'),phone:that.data.phoneValue},
+      success:function(res){
+        if(res.data.status==-1
+        ){
+          this.wetoast.toast({
+            title:'短信发送失败!'
+          })
+        }
+      }
+    })
     this.setData({
       isSend:true
     })
@@ -95,4 +141,5 @@ Page({
       }
     }, 1000)
   }
+ 
 })

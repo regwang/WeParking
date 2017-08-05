@@ -2,8 +2,34 @@
   "pages": [
     "pages/index/index",
     "pages/logs/logs",
-    "pages/bindPhone/bindPhone"
+    "pages/bindPhone/bindPhone",
+    "pages/share/share",
+    "pages/my/my"
   ],
+  "tabBar": {
+    "list": [
+      {
+      "pagePath": "pages/index/index",
+      "text": "预约",
+      "iconPath": "icon/appointment.png",
+      "selectedIconPath": "icon/appointment_on.png"
+      },
+      {
+        "pagePath": "pages/share/share",
+        "text": "共享",
+        "iconPath": "icon/share.png",
+        "selectedIconPath": "icon/share_on.png"
+      },
+      {
+        "pagePath": "pages/my/my",
+        "text": "我",
+        "iconPath": "icon/mine.png",
+        "selectedIconPath": "icon/mine_on.png"
+      }
+    ],
+    "color": "#b2b2b2",
+    "selectedColor": "#f4c600"
+  },
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#000000",

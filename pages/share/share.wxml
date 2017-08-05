@@ -1,0 +1,11 @@
+<!--share.wxml-->
+<!-- <text>share.wxml</text>
+<view class="test">
+  <button>test</button>
+</view> -->
+<view class="abc">
+  <button class="test" size="mini" type="primary">test</button> 
+   <!-- <map id='map' class='map_style' controls="{{controls}}" show-location />   -->
+  <view class="map_style">tse</view>
+  </view>
+

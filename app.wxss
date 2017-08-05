@@ -1,4 +1,5 @@
 /**app.wxss**/
+@import "/pages/wetoast/wetoast.wxss";
 .container {
   height: 100%;
   display: flex;
