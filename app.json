@@ -4,18 +4,19 @@
     "pages/logs/logs",
     "pages/bindPhone/bindPhone",
     "pages/share/share",
-    "pages/my/my"
+    "pages/my/my",
+    "pages/bindCar/bindCar"
   ],
   "tabBar": {
     "list": [
       {
-      "pagePath": "pages/index/index",
-      "text": "预约",
-      "iconPath": "icon/appointment.png",
-      "selectedIconPath": "icon/appointment_on.png"
+        "pagePath": "pages/index/index",
+        "text": "预约",
+        "iconPath": "icon/appointment.png",
+        "selectedIconPath": "icon/appointment_on.png"
       },
       {
-        "pagePath": "pages/share/share",
+        "pagePath": "pages/bindCar/bindCar",
         "text": "共享",
         "iconPath": "icon/share.png",
         "selectedIconPath": "icon/share_on.png"

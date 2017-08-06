@@ -1,0 +1,47 @@
+/* bindCar.wxss */
+Page{
+  background-color: #f0f0f0;
+  width:100%;
+  height:100%; 
+}
+.page_order{
+  display: flex;
+  flex-direction: column;
+}
+.carHint{
+  height:90rpx;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30rpx;
+}
+
+.phone_area{
+  height:181rpx;
+  width:100%;
+  background-color: #ffffff;
+  padding:0 32rpx;
+}
+.phone{
+  height:90rpx;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+.first_text{
+  width:150rpx;
+  font-size: 30rpx;
+}
+.second_text{
+  font-size:30rpx;
+}
+.signup_area{
+  margin-top: 40rpx;
+  padding:0 32rpx;
+}
+.phone_input{
+  height: 100%;
+  width:300rpx;
+  margin-left: 30rpx;
+}

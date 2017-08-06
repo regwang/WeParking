@@ -4,13 +4,13 @@
   <view class="phone_area">
     <view class="phone">
       <text class="main_text first_text">手机号码</text>
-      <input class="hint_text second_text" bindinput="getPhone" placeholder="填写手机号码" placeholder-class="hint_info" maxlength="11" type="number" />
+      <input class="hint_text second_text" bindinput="getPhone" placeholder="填写手机号码" placeholder-class="hint_text" maxlength="11" type="number" />
       <button size="mini" type="primary" bindtap="sendCode" disabled="{{codeDisable}}" style="background-color:#f4c600;width:150rpx;">{{sendCodeText}}</button>
     </view>
     <view class="line"></view>
     <view class="phone">
       <text class="main_text first_text">验证码</text>
-      <input class="hint_text second_text" bindinput="getCode" placeholder="输入验证码" placeholder-class="hint_info" maxlength="6" type="number" />
+      <input class="hint_text second_text" bindinput="getCode" placeholder="输入验证码" placeholder-class="hint_text" maxlength="6" type="number" />
     </view>
   </view>
   <view class="agreement_area">
