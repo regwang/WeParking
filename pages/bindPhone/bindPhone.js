@@ -86,7 +86,7 @@ Page({
         wx.hideLoading()
         console.log(res.data)
         if (res.data.status ==0){
-          wx.redirectTo({
+          wx.switchTab({
             url: '/pages/index/index',
           })
         }else if(res.data.status==-1){

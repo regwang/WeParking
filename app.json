@@ -4,8 +4,7 @@
     "pages/logs/logs",
     "pages/bindPhone/bindPhone",
     "pages/share/share",
-    "pages/my/my",
-    "pages/bindCar/bindCar"
+    "pages/my/my"
   ],
   "tabBar": {
     "list": [
@@ -16,7 +15,7 @@
         "selectedIconPath": "icon/appointment_on.png"
       },
       {
-        "pagePath": "pages/bindCar/bindCar",
+        "pagePath": "pages/share/share",
         "text": "共享",
         "iconPath": "icon/share.png",
         "selectedIconPath": "icon/share_on.png"

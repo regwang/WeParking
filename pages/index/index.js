@@ -38,6 +38,7 @@ Page({
           })
         } else if (res.data.status == 2) { //该用户当前有预约的订单
           that.showOrder()
+          that.getUserLocation()
         } else if (res.data.status == 3) { //该用户当前没有预约的订单
           //显示待预约的地图按钮
           that.showPending()
@@ -189,13 +190,13 @@ Page({
             },
             {
               id: "orderDetail",
-              iconPath: "/icon/location.png",
-              position: { left: (res.windowWidth - 50) / 2, top: res.windowHeight - 80, width: 50, height: 50 },
+              iconPath: "/icon/reservationBtn.png",
+              position: { left: (res.windowWidth - 150) / 2, top: res.windowHeight - 80, width: 150, height: 50 },
               clickable: true
             }
           ]
         })
-      },
+      }
     })
   }
 })
