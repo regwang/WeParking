@@ -49,12 +49,12 @@
     <!-- <map id='shareMap2' class='map_style2' bindtap="testmap"  latitude="{{latitude}}" longitude="{{longitude}}" bindcontroltap="bindcontroltap"   controls="{{controls}}" show-location /> -->
   </view>
   <view class="map_area">
-    <input class="inputMin main_text" bindinput="inputMin" placeholder="在此次输入位置的备注信息" placeholder-class="hint_text"  type="text" />
+    <input class="inputMin main_text" bindinput="bindAddressRemark" placeholder="在此次输入位置的备注信息" placeholder-class="hint_text"  type="text" />
   </view>
   <view class="share_area">
     <button type="primary" bindtap="sharingParking" style="background-color:#f4c600">发布</button>
   </view>
 </block>
 <block wx:else>
-  <template is="shareParking"></template>
+  <text>加载中</text>
 </block>

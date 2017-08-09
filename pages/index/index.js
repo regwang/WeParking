@@ -8,24 +8,80 @@ Page({
     markers:[],
     latitude: 39.91543309328607,
     longitude: 116.45597668647765,
-    southwestLatitude:0,
-    southwestLongitude:0,
-    northeastLatitude:0,
-    northeastLongitude:0,
     countDown:60
   },
   onLoad: function () {
-   console.log('index onload')
   },
   onReady: function () {
     this.mapContext = wx.createMapContext('map')
   },
+
   onShow:function () {
-    console.log('index onshow')
     var that = this
     wx.showLoading({
       title: '加载中..'
     })
+    var that = this
+    var hasToken = true
+    try {
+      var value = wx.getStorageSync('token')
+      if (!value) {
+        hasToken = false
+      }
+    } catch (e) { }
+    if (hasToken) {
+      wx.checkSession({
+        success: function () {
+          that.checkUserBookingStatus()
+        },
+        fail: function () {
+          wx.login({
+            success: function (res) {
+              if (res.code) {
+                wx.request({
+                  url: app.globalData.serverUrl + 'onLogin.als',
+                  data: { code: res.code },
+                  success: function (res2) {
+                    if (res2.data.status == 0) {
+                      try {
+                        wx.setStorageSync('token', res2.data.token)
+                        that.checkUserBookingStatus()
+                      } catch (e) { }
+                    }
+                  }
+                })
+              }
+            }
+          })
+        }
+      })
+    }else{
+      wx.login({
+        success: function (res) {
+          if (res.code) {
+            wx.request({
+              url: app.globalData.serverUrl + 'onLogin.als',
+              data: { code: res.code },
+              success: function (res2) {
+                if (res2.data.status == 0) {
+                  try {
+                    wx.setStorageSync('token', res2.data.token)
+                    that.checkUserBookingStatus()
+                  } catch (e) { }
+                }
+              }
+            })
+          }
+        }
+      })
+    }
+    
+  },
+
+
+  //请求服务器检查订单状态,控制不同状态下的界面显示
+  checkUserBookingStatus:function(){
+    var that=this
     wx.request({
       url: app.globalData.serverUrl + 'getUserBookingStatus.als',
       data: { token: wx.getStorageSync('token') },
@@ -44,6 +100,8 @@ Page({
           that.showPending()
           //获得用户位置
           that.getUserLocation()
+          //获得可预约的订单并标记
+          that.getShareOrder()
           //获取可预约订单并标记
         } else {
           wx.showToast({
@@ -56,43 +114,71 @@ Page({
     })
   },
 
+
   //获得可预约订单并标记
   getShareOrder:function(){
     var that=this
     //获得地图范围
-    this.getMapRegion()
-    wx.request({
-      url: app.globalData.serverUrl +'getSharingOrder.als',
-      data: 
-      { 
-        token: wx.getStorageSync('token'),
-        min: that.data.countDown,
-        southwestLatitude: that.data.southwestLatitude,
-        southwestLongitude: that.data.southwestLongitude,
-        northeastLatitude: that.data.northeastLatitude,
-        northeastLongitude: that.data.northeastLongitude
-      },
-      success:function(res){
-        if(res.data.status==0){
-          that.setData({
-            markers:res.data.orders
-          })
-        }else{
-          wx.showToast({
-            title: '内部错误',
-            icon:'loading'
-          })
-        }
+    var that = this
+    this.mapContext.getRegion({
+      success: function (res) {
+        wx.request({
+          url: app.globalData.serverUrl + 'getSharingOrder.als',
+          data:
+          {
+            token: wx.getStorageSync('token'),
+            min: that.data.countDown,
+            southwestLatitude: res.southwest.latitude,
+            southwestLongitude: res.southwest.longitude,
+            northeastLatitude: res.northeast.latitude,
+            northeastLongitude: res.northeast.longitude
+          },
+          success: function (res) {
+            if (res.data.status == 0) {
+              that.setData({
+                markers: res.data.orders
+              })
+            } else {
+              wx.showToast({
+                title: '内部错误',
+                icon: 'loading'
+              })
+            }
+          }
+        })
       }
     })
+   
   },
 
   //定位按钮点击事件
   bindcontroltap:function(e){
     if (e.controlId =='currentLocation'){
       this.getUserLocation()
-    }else if(e.controlId=='chooseTime'){
-      
+    }else if(e.controlId=='chooseTime_5'){
+      this.setData({
+        countDown:5
+      })
+      this.showPending()
+      getShareOrder()
+    } else if (e.controlId == 'chooseTime_10') {
+      this.setData({
+        countDown: 10
+      })
+      this.showPending()
+      getShareOrder()
+    } else if (e.controlId == 'chooseTime_15') {
+      this.setData({
+        countDown: 15
+      })
+      this.showPending()
+      getShareOrder()
+    } else if (e.controlId == 'chooseTime_all') {
+      this.setData({
+        countDown: 60
+      })
+      this.showPending()
+      getShareOrder()
     }
   },
 
@@ -105,7 +191,7 @@ Page({
           southwestLatitude: res.southwest.latitude,
           southwestLongitude: res.southwest.longitude,
           northeastLatitude: res.northeast.latitude,
-          northeastLongitude: res.northeast.latitude
+          northeastLongitude: res.northeast.longitude
         })
       }
     })
@@ -123,11 +209,10 @@ Page({
               that.getLocation()
             },
             fail(){ //用户拒绝授权,opensetting
-              console.log('用户拒绝')
+
             }
           })
         }else{ //有地图授权
-          console.log('有地图授权')
           that.getLocation()
         }
       }
@@ -146,7 +231,9 @@ Page({
         that.mapContext.moveToLocation()
       },
       fail: function () {
-        console.log('获取定位失败')
+        wx.showToast({
+          title: '获取定位失败',
+        })
       }
     })
   },
@@ -156,23 +243,148 @@ Page({
     var that = this
     wx.getSystemInfo({
       success: function (res) {
-        that.setData({
-          controls: [
-            {
-              id: "currentLocation",
-              iconPath: "/icon/location.png",
-              position: { left: 10, top: res.windowHeight - 80, width: 50, height: 50 },
-              clickable: true
-            },
-            {
-              id: "chooseTime",
-              iconPath: "/icon/filtrate.png",
-              position: { left: (res.windowWidth - 50 - 10), top: res.windowHeight - 80, width: 50, height: 50 },
-              clickable: true
-            }
-          ]
-        })
-      },
+        if (that.data.countDown==60){
+          that.setData({
+            controls: [
+              {
+                id: "currentLocation",
+                iconPath: "/icon/location.png",
+                position: { left: 10, top: res.windowHeight - 80, width: 50, height: 50 },
+                clickable: true
+              },
+              {
+                id: "chooseTime_15",
+                iconPath: "/icon/min_choose_15.png",
+                position: { left: (res.windowWidth - 50 - 10), top: res.windowHeight - 80, width: 50, height: 50 },
+                clickable: true
+              },
+              {
+                id: "chooseTime_10",
+                iconPath: "/icon/min_choose_10.png",
+                position: { left: (res.windowWidth - 50 - 10), top: res.windowHeight - 80-51, width: 50, height: 50 },
+                clickable: true
+              },
+              {
+                id: "chooseTime_5",
+                iconPath: "/icon/min_choose_5.png",
+                position: { left: (res.windowWidth - 50 - 10), top: res.windowHeight - 80 - 51-51, width: 50, height: 50 },
+                clickable: true
+              },
+              {
+                id: "chooseTime_all",
+                iconPath: "/icon/min_choose_all_on.png",
+                position: { left: (res.windowWidth - 50 - 10), top: res.windowHeight - 80 - 51 - 51-51, width: 50, height: 50 },
+                clickable: true
+              }
+            ]
+          })
+        }else if(that.data.countDown==5){
+          that.setData({
+            controls: [
+              {
+                id: "currentLocation",
+                iconPath: "/icon/location.png",
+                position: { left: 10, top: res.windowHeight - 80, width: 50, height: 50 },
+                clickable: true
+              },
+              {
+                id: "chooseTime_15",
+                iconPath: "/icon/min_choose_15.png",
+                position: { left: (res.windowWidth - 50 - 10), top: res.windowHeight - 80, width: 50, height: 50 },
+                clickable: true
+              },
+              {
+                id: "chooseTime_10",
+                iconPath: "/icon/min_choose_10.png",
+                position: { left: (res.windowWidth - 50 - 10), top: res.windowHeight - 80 - 51, width: 50, height: 50 },
+                clickable: true
+              },
+              {
+                id: "chooseTime_5",
+                iconPath: "/icon/min_choose_5_on.png",
+                position: { left: (res.windowWidth - 50 - 10), top: res.windowHeight - 80 - 51 - 51, width: 50, height: 50 },
+                clickable: true
+              },
+              {
+                id: "chooseTime_all",
+                iconPath: "/icon/min_choose_all.png",
+                position: { left: (res.windowWidth - 50 - 10), top: res.windowHeight - 80 - 51 - 51 - 51, width: 50, height: 50 },
+                clickable: true
+              }
+            ]
+          })
+        }else if(that.data.countDown==10){
+          that.setData({
+            controls: [
+              {
+                id: "currentLocation",
+                iconPath: "/icon/location.png",
+                position: { left: 10, top: res.windowHeight - 80, width: 50, height: 50 },
+                clickable: true
+              },
+              {
+                id: "chooseTime_15",
+                iconPath: "/icon/min_choose_15.png",
+                position: { left: (res.windowWidth - 50 - 10), top: res.windowHeight - 80, width: 50, height: 50 },
+                clickable: true
+              },
+              {
+                id: "chooseTime_10",
+                iconPath: "/icon/min_choose_10_on.png",
+                position: { left: (res.windowWidth - 50 - 10), top: res.windowHeight - 80 - 51, width: 50, height: 50 },
+                clickable: true
+              },
+              {
+                id: "chooseTime_5",
+                iconPath: "/icon/min_choose_5.png",
+                position: { left: (res.windowWidth - 50 - 10), top: res.windowHeight - 80 - 51 - 51, width: 50, height: 50 },
+                clickable: true
+              },
+              {
+                id: "chooseTime_all",
+                iconPath: "/icon/min_choose_all.png",
+                position: { left: (res.windowWidth - 50 - 10), top: res.windowHeight - 80 - 51 - 51 - 51, width: 50, height: 50 },
+                clickable: true
+              }
+            ]
+          })
+        }else if(that.data.countDown==15){
+          that.setData({
+            controls: [
+              {
+                id: "currentLocation",
+                iconPath: "/icon/location.png",
+                position: { left: 10, top: res.windowHeight - 80, width: 50, height: 50 },
+                clickable: true
+              },
+              {
+                id: "chooseTime_15",
+                iconPath: "/icon/min_choose_15_on.png",
+                position: { left: (res.windowWidth - 50 - 10), top: res.windowHeight - 80, width: 50, height: 50 },
+                clickable: true
+              },
+              {
+                id: "chooseTime_10",
+                iconPath: "/icon/min_choose_10.png",
+                position: { left: (res.windowWidth - 50 - 10), top: res.windowHeight - 80 - 51, width: 50, height: 50 },
+                clickable: true
+              },
+              {
+                id: "chooseTime_5",
+                iconPath: "/icon/min_choose_5.png",
+                position: { left: (res.windowWidth - 50 - 10), top: res.windowHeight - 80 - 51 - 51, width: 50, height: 50 },
+                clickable: true
+              },
+              {
+                id: "chooseTime_all",
+                iconPath: "/icon/min_choose_all.png",
+                position: { left: (res.windowWidth - 50 - 10), top: res.windowHeight - 80 - 51 - 51 - 51, width: 50, height: 50 },
+                clickable: true
+              }
+            ]
+          })
+        }
+      }
     })
   },
   //显示已预约状态时,地图界面显示的按钮

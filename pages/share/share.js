@@ -20,7 +20,8 @@ Page({
     shareName:"",
     shareAddress:"",
     shareLatitude:0,
-    shareLongitude:0
+    shareLongitude:0,
+    addressRemark:''
   },
   onLoad: function () {
     
@@ -38,7 +39,6 @@ Page({
       data: { token: wx.getStorageSync('token') },
       success: function (res) {
         wx.hideLoading()
-        console.log(res.data)
         //未绑定手机
         if (res.data.status == 1) {
           wx.redirectTo({
@@ -202,9 +202,7 @@ Page({
         success: function (res) {
           console.log(res.data)
           if (res.data.status == 0) {
-            wx.switchTab({
-              url: '/pages/share/share',
-            })
+            that.onShow()
           } else {
             wx.showToast({
               title: '出错了',
@@ -278,7 +276,11 @@ Page({
     wx.chooseLocation({
       success: function(res) {
         that.setData({
-          chooseMapText:res.name+";"+res.address
+          chooseMapText:res.name+";"+res.address,
+          shareName: res.name,
+          shareAddress: res.address,
+          shareLatitude: res.latitude,
+          shareLongitude: res.longitude
         })
       },
       cancel:function(){
@@ -289,22 +291,85 @@ Page({
     })
   },
 
+  bindAddressRemark:function(e){
+    var remark=e.detail.value
+    if(addressRemark.length>0){
+      this.setData({
+        addressRemark:remark
+      })
+    }else{
+      this.setData({
+        addressRemark:''
+      })
+    }
+  },
+
   //共享停车位
   sharingParking:function(){
     var inputMin=this.data.inputMin
     var lastMin=0
-    if(inputMin.length==0){
+    if (inputMin.length == 0) {
       lastMin = this.data.selectedMin
     }else{
-      if(inputMin<5||inputMin>60){
+      if (inputMin < 5 || inputMin > 60) {
         wx.showToast({
           title: '自定义分钟数不正确',
-          icon:'loading',
-          duration:1000
+          icon: 'loading',
+          duration: 1000
         })
+        return;
       }else{
-        lastMin=inputMin
+        lastMin = inputMin
       }
+    }
+
+    //检查车位位置选取情况
+    var mapText = this.data.chooseMapText
+    if (mapText == '点击此处标记您车位的位置') {
+      wx.showToast({
+        title: '请标记车位的位置',
+        icon: 'loading',
+        duration: 1000
+      })
+      return
+    } else {
+      //发布车位
+      var that=this
+      wx.showLoading({
+        title: '请稍等..',
+      })
+      wx.request({
+        url: app.globalData.serverUrl +'startSharingOrder.als',
+        data:{
+          token:wx.getStorageSync('token'),
+          minute:lastMin,
+          longitude: that.data.shareLongitude,
+          latitude: that.data.shareLatitude,
+          name:that.data.shareName,
+          address:that.data.shareAddress,
+          addressRemark:that.data.addressRemark
+        },
+        success:function(res){
+          wx.hideLoading()
+          if(res.data.status==0){
+            that.onShow()
+          }else{
+            wx.showToast({
+              title: '出错了',
+              icon:'loading',
+              duration:1000
+            })
+          }
+        },
+        fail:function(){
+          wx.hideLoading()
+          wx.showToast({
+            title: '出错了',
+            icon: 'loading',
+            duration: 1000
+          })
+        }
+      })
     }
   }
 })

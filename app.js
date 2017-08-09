@@ -3,33 +3,34 @@ var WeToast=require('/pages/wetoast/wetoast.js')
 App({
   WeToast,
   onLaunch: function() {
-    //调用API从本地缓存中获取数据
-    var logs = wx.getStorageSync('logs') || []
-    logs.unshift(Date.now())
-    wx.setStorageSync('logs', logs)
-    var that=this
-    var hasToken=true
-    try{
-      var value = wx.getStorageSync('token')
-      if (!value) {
-        hasToken=false
-      }
-    }catch(e){}
-    if(hasToken){
-      wx.checkSession({
-        success: function () {
-          console.log('islogin')
-        },
-        fail: function () {
-            console.log('notlogin')
-            that.doLogin()
-        }
-      })
-    }else{
-      that.doLogin()
-    }
-    
+    // //调用API从本地缓存中获取数据
+    // var logs = wx.getStorageSync('logs') || []
+    // logs.unshift(Date.now())
+    // wx.setStorageSync('logs', logs)
+    // console.log('app onlaunch')
+    // var that=this
+    // var hasToken=true
+    // try{
+    //   var value = wx.getStorageSync('token')
+    //   if (!value) {
+    //     hasToken=false
+    //   }
+    // }catch(e){}
+    // if(hasToken){
+    //   wx.checkSession({
+    //     success: function () {
+    //       console.log('islogin')
+    //     },
+    //     fail: function () {
+    //         console.log('notlogin')
+    //         that.doLogin()
+    //     }
+    //   })
+    // }else{
+    //   that.doLogin()
+    // }
   },
+
   doLogin:function(){
     var that=this
     wx.login({
