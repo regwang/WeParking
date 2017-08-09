@@ -151,6 +151,14 @@ Page({
    
   },
 
+  //点击某个车位图标时触发
+  markertap:function(e){
+    console.log('进来了')
+    wx.navigateTo({
+      url: '/pages/bookInfo/bookInfo?orderId='+e.markerId,
+    })
+  },
+
   //定位按钮点击事件
   bindcontroltap:function(e){
     if (e.controlId =='currentLocation'){
@@ -160,25 +168,25 @@ Page({
         countDown:5
       })
       this.showPending()
-      getShareOrder()
+      this.getShareOrder()
     } else if (e.controlId == 'chooseTime_10') {
       this.setData({
         countDown: 10
       })
       this.showPending()
-      getShareOrder()
+      this.getShareOrder()
     } else if (e.controlId == 'chooseTime_15') {
       this.setData({
         countDown: 15
       })
       this.showPending()
-      getShareOrder()
+      this.getShareOrder()
     } else if (e.controlId == 'chooseTime_all') {
       this.setData({
         countDown: 60
       })
       this.showPending()
-      getShareOrder()
+      this.getShareOrder()
     }
   },
 

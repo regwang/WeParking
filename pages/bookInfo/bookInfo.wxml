@@ -1,0 +1,90 @@
+<!--bookInfo.wxml-->
+<view class="info_view">
+  <view class="one_info">
+    <view class="one_info_view">
+      <text class="subject_text">共享人</text>
+      <text class="main_text">{{sharingName}}</text>
+    </view>
+    <view class="line"></view>
+  </view>
+  <view class="one_info">
+    <view class="one_info_view">
+      <text class="subject_text">车牌号码</text>
+      <text class="main_text">{{carNumber}}</text>
+    </view>
+    <view class="line"></view>
+  </view>
+  <view class="one_info">
+    <view class="one_info_view">
+      <text class="subject_text">车辆颜色</text>
+      <text class="main_text">{{carColor}}</text>
+    </view>
+    <view class="line"></view>
+  </view>
+  <view class="one_info">
+    <view class="one_info_view">
+      <text class="subject_text">离场时间</text>
+      <text class="main_text">{{leaveTime}}</text>
+    </view>
+    <view class="line"></view>
+  </view>
+  <view class="one_info">
+    <view class="one_info_view">
+      <text class="subject_text">剩余时间</text>
+      <text class="main_text">{{minute}}分钟</text>
+    </view>
+    <view class="line"></view>
+  </view>
+  <view class="one_info">
+    <view class="one_info_view">
+      <text class="subject_text">预约金额</text>
+      <text class="light_text">{{money}}元</text>
+    </view>
+    <view class="line"></view>
+  </view>
+  <view class="one_info">
+    <view class="one_info_view">
+      <text class="subject_text">预约时间</text>
+      <text class="main_text">{{appointmentTime}}</text>
+    </view>
+    <view class="line"></view>
+  </view>
+  <view class="one_info">
+    <view class="one_info_view">
+      <text class="subject_text">交易时间</text>
+      <text class="main_text">{{payTime}}</text>
+    </view>
+    <view class="line"></view>
+  </view>
+  <view class="one_info">
+    <view class="one_info_view">
+      <text class="subject_text">车位地点</text>
+      <text class="light_text">查看</text>
+    </view>
+    <view class="line"></view>
+  </view>
+  <view class="one_info">
+    <view class="one_info_view">
+      <text class="subject_text">订单状态</text>
+      <text class="order_status">{{orderStatus}}</text>
+    </view>
+  </view>
+</view>
+<view class="book">
+  <button type="primary" style="background-color:#f4c600;">预约</button>
+</view>
+<view class="book">
+  <button type="primary" style="background-color:#f4c600;">微信支付</button>
+</view>
+<view class="book">
+  <button type="primary" plain="true" style="color:#f4c600;background-color:#ffffff;border-color:#f4c600">电话联系</button>
+</view>
+<view class="book">
+  <button type="primary" plain="true" style="color:#b2b2b2;background-color:#ffffff;border-color:#b2b2b2">订单详情</button>
+</view>
+<view class="book">
+  <button type="primary" plain="true" style="color:#b2b2b2;background-color:#ffffff;border-color:#b2b2b2">订单有异议</button>
+</view>
+<view class="book">
+  <button type="primary" plain="true" style="color:#b2b2b2;background-color:#ffffff;border-color:#b2b2b2">举报</button>
+</view>

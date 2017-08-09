@@ -4,7 +4,8 @@
     "pages/logs/logs",
     "pages/bindPhone/bindPhone",
     "pages/share/share",
-    "pages/my/my"
+    "pages/my/my",
+    "pages/bookInfo/bookInfo"
   ],
   "tabBar": {
     "list": [
