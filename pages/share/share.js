@@ -293,7 +293,7 @@ Page({
 
   bindAddressRemark:function(e){
     var remark=e.detail.value
-    if(addressRemark.length>0){
+    if(remark.length>0){
       this.setData({
         addressRemark:remark
       })

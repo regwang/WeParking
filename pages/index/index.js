@@ -153,7 +153,6 @@ Page({
 
   //点击某个车位图标时触发
   markertap:function(e){
-    console.log('进来了')
     wx.navigateTo({
       url: '/pages/bookInfo/bookInfo?orderId='+e.markerId,
     })

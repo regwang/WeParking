@@ -3,59 +3,67 @@
   <view class="one_info">
     <view class="one_info_view">
       <text class="subject_text">共享人</text>
-      <text class="main_text">{{sharingName}}</text>
+      <text class="main_text">{{orderInfo.sharingName}}</text>
     </view>
     <view class="line"></view>
   </view>
-  <view class="one_info">
-    <view class="one_info_view">
-      <text class="subject_text">车牌号码</text>
-      <text class="main_text">{{carNumber}}</text>
+  <block wx:if="{{orderInfo.orderStatus==3 || orderInfo.orderStatus==4}}">
+    <view class="one_info">
+      <view class="one_info_view">
+        <text class="subject_text">车牌号码</text>
+        <text class="main_text">{{orderInfo.carNumber}}</text>
+      </view>
+      <view class="line"></view>
     </view>
-    <view class="line"></view>
-  </view>
-  <view class="one_info">
-    <view class="one_info_view">
-      <text class="subject_text">车辆颜色</text>
-      <text class="main_text">{{carColor}}</text>
+    <view class="one_info">
+      <view class="one_info_view">
+        <text class="subject_text">车辆颜色</text>
+        <text class="main_text">{{orderInfo.carColor}}</text>
+      </view>
+      <view class="line"></view>
     </view>
-    <view class="line"></view>
-  </view>
-  <view class="one_info">
-    <view class="one_info_view">
-      <text class="subject_text">离场时间</text>
-      <text class="main_text">{{leaveTime}}</text>
+  </block>
+  <block wx:if="{{orderInfo.orderStatus==0}}">
+    <view class="one_info">
+      <view class="one_info_view">
+        <text class="subject_text">离场时间</text>
+        <text class="main_text">{{orderInfo.leaveTime}}</text>
+      </view>
+      <view class="line"></view>
     </view>
-    <view class="line"></view>
-  </view>
-  <view class="one_info">
-    <view class="one_info_view">
-      <text class="subject_text">剩余时间</text>
-      <text class="main_text">{{minute}}分钟</text>
+    <view class="one_info">
+      <view class="one_info_view">
+        <text class="subject_text">剩余时间</text>
+        <text class="main_text">{{orderInfo.minute}}分钟</text>
+      </view>
+      <view class="line"></view>
     </view>
-    <view class="line"></view>
-  </view>
-  <view class="one_info">
-    <view class="one_info_view">
-      <text class="subject_text">预约金额</text>
-      <text class="light_text">{{money}}元</text>
+    <view class="one_info">
+      <view class="one_info_view">
+        <text class="subject_text">预约金额</text>
+        <text class="light_text">{{orderInfo.money}}元</text>
+      </view>
+      <view class="line"></view>
     </view>
-    <view class="line"></view>
-  </view>
-  <view class="one_info">
-    <view class="one_info_view">
-      <text class="subject_text">预约时间</text>
-      <text class="main_text">{{appointmentTime}}</text>
+  </block>
+  <block wx:if="{{orderInfo.orderStatus==3 || orderInfo.orderStatus==4 || orderInfo.orderStatus==5 || orderInfo.orderStatus==6 || orderInfo.orderStatus==7}}">
+    <view class="one_info">
+      <view class="one_info_view">
+        <text class="subject_text">预约时间</text>
+        <text class="main_text">{{orderInfo.appointmentTime}}</text>
+      </view>
+      <view class="line"></view>
     </view>
-    <view class="line"></view>
-  </view>
-  <view class="one_info">
-    <view class="one_info_view">
-      <text class="subject_text">交易时间</text>
-      <text class="main_text">{{payTime}}</text>
+  </block>
+  <block wx:if="{{orderInfo.orderStatus==5}}">
+    <view class="one_info">
+      <view class="one_info_view">
+        <text class="subject_text">交易时间</text>
+        <text class="main_text">{{orderInfo.payTime}}</text>
+      </view>
+      <view class="line"></view>
     </view>
-    <view class="line"></view>
-  </view>
+  </block>
   <view class="one_info">
     <view class="one_info_view">
       <text class="subject_text">车位地点</text>
@@ -63,19 +71,25 @@
     </view>
     <view class="line"></view>
   </view>
-  <view class="one_info">
-    <view class="one_info_view">
-      <text class="subject_text">订单状态</text>
-      <text class="order_status">{{orderStatus}}</text>
+  <block wx:if="{{orderInfo.orderStatus!=0}}">
+    <view class="one_info">
+      <view class="one_info_view">
+        <text class="subject_text">订单状态</text>
+        <text class="order_status">{{orderInfo.orderStatusText}}</text>
+      </view>
     </view>
+  </block>
+</view>
+<block wx:if="{{orderInfo.orderStatus==0}}">
+  <view class="book">
+    <button type="primary" style="background-color:#f4c600;">预约</button>
   </view>
-</view>
-<view class="book">
-  <button type="primary" style="background-color:#f4c600;">预约</button>
-</view>
-<view class="book">
-  <button type="primary" style="background-color:#f4c600;">微信支付</button>
-</view>
+</block>
+<block wx:if="{{orderInfo.orderStatus==4}}">
+  <view class="book">
+    <button type="primary" style="background-color:#f4c600;">微信支付</button>
+  </view>
+</block>
 <view class="book">
   <button type="primary" plain="true" style="color:#f4c600;background-color:#ffffff;border-color:#f4c600">电话联系</button>
 </view>
