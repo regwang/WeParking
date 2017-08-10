@@ -5,7 +5,9 @@
     "pages/bindPhone/bindPhone",
     "pages/share/share",
     "pages/my/my",
-    "pages/bookInfo/bookInfo"
+    "pages/bookInfo/bookInfo",
+    "pages/bookInfoDetail/bookInfoDetail",
+    "pages/reportOrder/reportOrder"
   ],
   "tabBar": {
     "list": [
@@ -22,7 +24,7 @@
         "selectedIconPath": "icon/share_on.png"
       },
       {
-        "pagePath": "pages/my/my",
+        "pagePath": "pages/reportOrder/reportOrder",
         "text": "我",
         "iconPath": "icon/mine.png",
         "selectedIconPath": "icon/mine_on.png"

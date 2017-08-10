@@ -162,6 +162,10 @@ Page({
   bindcontroltap:function(e){
     if (e.controlId =='currentLocation'){
       this.getUserLocation()
+    }else if(e.controlId=='orderDetail'){
+      wx.navigateTo({
+        url: '/pages/bookInfo/bookInfo?type=2',
+      })
     }else if(e.controlId=='chooseTime_5'){
       this.setData({
         countDown:5

@@ -1,4 +1,4 @@
-<!--bookInfo.wxml-->
+<!--bookInfoDetail.wxml-->
 <view class="info_view">
   <view class="one_info">
     <view class="one_info_view">
@@ -64,7 +64,6 @@
       <view class="line"></view>
     </view>
   </block>
-  <block wx:if="{{orderInfo.status!=0}}">
   <view class="one_info">
     <view class="one_info_view">
       <text class="subject_text">车位地点</text>
@@ -72,21 +71,13 @@
     </view>
     <view class="line"></view>
   </view>
-  </block>
-  <block wx:if="{{orderInfo.status!=0}}">
-    <view class="one_info">
-      <view class="one_info_view">
-        <text class="subject_text">订单状态</text>
-        <text class="order_status">{{orderStatusText}}</text>
-      </view>
+  <view class="one_info">
+    <view class="one_info_view">
+      <text class="subject_text">订单状态</text>
+      <text class="order_status">{{orderStatusText}}</text>
     </view>
-  </block>
-</view>
-<block wx:if="{{orderInfo.status==0}}">
-  <view class="book">
-    <button bindtap="bookOrder" type="primary" style="background-color:#f4c600;">预约</button>
   </view>
-</block>
+</view>
 <block wx:if="{{orderInfo.status==4}}">
   <view class="book">
     <button type="primary" style="background-color:#f4c600;">微信支付</button>
@@ -97,14 +88,13 @@
     <button bindtap="callUser" type="primary" plain="true" style="color:#f4c600;background-color:#ffffff;border-color:#f4c600">电话联系</button>
   </view>
  </block> 
-<!-- <block wx:if="{{orderInfo.status==3 || orderInfo.status==4}}"> -->
+<block wx:if="{{orderInfo.status==3}}">
   <view class="book">
-    <button bindtap="orderDetail" type="primary" plain="true" style="color:#b2b2b2;background-color:#ffffff;border-color:#b2b2b2">订单详情</button>
+    <button bindtap="submitComment" type="primary" plain="true" style="color:#b2b2b2;background-color:#ffffff;border-color:#b2b2b2">订单有异议</button>
   </view>
-<!-- </block> -->
-<!-- <view class="book">
-  <button type="primary" plain="true" style="color:#b2b2b2;background-color:#ffffff;border-color:#b2b2b2">订单有异议</button>
-</view>
-<view class="book">
-  <button type="primary" plain="true" style="color:#b2b2b2;background-color:#ffffff;border-color:#b2b2b2">举报</button>
-</view> -->
+</block>
+<block wx:if="{{orderInfo.status==4}}">
+  <view class="book">
+    <button bindtap="submitReport" type="primary" plain="true" style="color:#b2b2b2;background-color:#ffffff;border-color:#b2b2b2">举报</button>
+  </view> 
+</block>

@@ -1,4 +1,4 @@
-/* bookInfo.wxss */
+/* bookInfoDetail.wxss */
 Page{
   background-color: #f0f0f0;
 }
