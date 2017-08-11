@@ -106,6 +106,38 @@ Page({
                   duration: 1000
                 })
               }
+              //车位已经被取消
+              else if(res.data.status==-2){
+                wx.showModal({
+                  title: '提示',
+                  content: '该车位已被取消',
+                  showCancel: false,
+                  confirmColor: '#f4c600',
+                  success: function (res) {
+                    if (res.confirm) {
+                      wx.navigateBack({
+                        delta: 1
+                      })
+                    }
+                  }
+                })
+              }
+              //车位已经被预约
+              else if(res.data.status==-3){
+                wx.showModal({
+                  title: '提示',
+                  content: '该车位已被预约',
+                  showCancel: false,
+                  confirmColor: '#f4c600',
+                  success: function (res) {
+                    if (res.confirm) {
+                      wx.navigateBack({
+                        delta: 1
+                      })
+                    }
+                  }
+                })
+              }
             },
             fail: function () {
               wx.showToast({
@@ -119,6 +151,81 @@ Page({
       }
     })
     
+  },
+  //微信支付
+  wechatPay:function(){
+    var that=this
+    wx.showModal({
+      title: '提示',
+      content: '确定支付吗？',
+      confirmColor: '#f4c600',
+      success:function(res){
+        if(res.confirm){
+          wx.request({
+            url: app.globalData.serverUrl +'payParking.als',
+            data:{id:that.data.orderInfo.id,token:wx.getStorageSync('token')},
+            success:function(res){
+              if(res.data==0){
+                console.log('创建微信订单的数据:')
+                console.log(res.data)
+                wx.requestPayment({
+                  timeStamp: res.data.timeStamp,
+                  nonceStr: res.data.nonceStr,
+                  package: res.data.package,
+                  signType: 'MD5',
+                  paySign: res.data.paySign,
+                  success:function(res){
+                    console.log('支付成功')
+                    console.log(res)
+                    //更新订单为已完成
+                    wx.request({
+                      url: app.globalData.serverUrl +'updateParkingComplete.als',
+                      data:{id:that.data.orderInfo.id},
+                      success:function(res){
+                        if(res.data.status==0){
+                          wx.navigateBack({
+                            delta: 1
+                          })
+                        }else{
+                          wx.showToast({
+                            title: '订单状态更新失败',
+                            icon:'loading',
+                            duration:1000
+                          })
+                        }
+                      }
+                    })
+                   
+                    
+                  },
+                  fail:function(res){
+                    console.log('支付失败')
+                    console.log(res)
+                  },
+                  complete:function(res){
+                    console.log('支付完成')
+                    console.log(res)
+                  }
+                })
+              }else{
+                wx.showToast({
+                  title: '出错了',
+                  icon: 'loading',
+                  duration: 1000
+                })
+              }
+            },
+            fail:function(){
+              wx.showToast({
+                title: '出错了',
+                icon:'loading',
+                duration:1000
+              })
+            }
+          })
+        }
+      }
+    })
   },
   //打电话给共享人
   callUser:function(){

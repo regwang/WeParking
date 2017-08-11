@@ -23,7 +23,7 @@ Page({
         wx.setNavigationBarTitle({
           title: '举报',
         })
-        wx.setData({
+        this.setData({
           hint_text: '请输入举报详情(100字以内)',
           status:6,
           id:options.id,
@@ -33,7 +33,7 @@ Page({
         wx.setNavigationBarTitle({
           title: '异议',
         })
-        wx.setData({
+        this.setData({
           hint_text: '请输入异议详情(100字以内)',
           status: 7,
           id: options.id,
@@ -42,6 +42,7 @@ Page({
       }
   },
   confirmInput:function(e){
+    console.log('testjinq')
     this.setData({
       reportValue:e.detail.value
     })
@@ -74,7 +75,7 @@ Page({
               success:function(res){
                 if(res.confirm){
                   wx.navigateBack({
-                    delta:1
+                    delta:2
                   })
                 }
               }

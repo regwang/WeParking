@@ -88,11 +88,11 @@
     <button bindtap="callUser" type="primary" plain="true" style="color:#f4c600;background-color:#ffffff;border-color:#f4c600">电话联系</button>
   </view>
  </block> 
-<block wx:if="{{orderInfo.status==3}}">
+ <block wx:if="{{orderInfo.status==3}}"> 
   <view class="book">
     <button bindtap="submitComment" type="primary" plain="true" style="color:#b2b2b2;background-color:#ffffff;border-color:#b2b2b2">订单有异议</button>
   </view>
-</block>
+ </block> 
 <block wx:if="{{orderInfo.status==4}}">
   <view class="book">
     <button bindtap="submitReport" type="primary" plain="true" style="color:#b2b2b2;background-color:#ffffff;border-color:#b2b2b2">举报</button>

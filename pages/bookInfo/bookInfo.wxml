@@ -87,21 +87,21 @@
     <button bindtap="bookOrder" type="primary" style="background-color:#f4c600;">预约</button>
   </view>
 </block>
-<block wx:if="{{orderInfo.status==4}}">
+<!-- <block wx:if="{{orderInfo.status==4}}"> -->
   <view class="book">
-    <button type="primary" style="background-color:#f4c600;">微信支付</button>
+    <button bindtap="wechatPay" type="primary" style="background-color:#f4c600;">微信支付</button>
   </view>
-</block>
+<!-- </block> -->
  <block wx:if="{{orderInfo.status==3 || orderInfo.status==4}}"> 
   <view class="book">
     <button bindtap="callUser" type="primary" plain="true" style="color:#f4c600;background-color:#ffffff;border-color:#f4c600">电话联系</button>
   </view>
  </block> 
-<!-- <block wx:if="{{orderInfo.status==3 || orderInfo.status==4}}"> -->
+ <block wx:if="{{orderInfo.status==3 || orderInfo.status==4}}"> 
   <view class="book">
     <button bindtap="orderDetail" type="primary" plain="true" style="color:#b2b2b2;background-color:#ffffff;border-color:#b2b2b2">订单详情</button>
   </view>
-<!-- </block> -->
+ </block> 
 <!-- <view class="book">
   <button type="primary" plain="true" style="color:#b2b2b2;background-color:#ffffff;border-color:#b2b2b2">订单有异议</button>
 </view>

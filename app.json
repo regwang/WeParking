@@ -24,7 +24,7 @@
         "selectedIconPath": "icon/share_on.png"
       },
       {
-        "pagePath": "pages/reportOrder/reportOrder",
+        "pagePath": "pages/my/my",
         "text": "我",
         "iconPath": "icon/mine.png",
         "selectedIconPath": "icon/mine_on.png"
