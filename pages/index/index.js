@@ -6,11 +6,14 @@ Page({
     windowHeight:0,
     controls:[],
     markers:[],
+    needMarker:false,
+    needLocation:true,
     latitude: 39.91543309328607,
     longitude: 116.45597668647765,
     countDown:60
   },
   onLoad: function () {
+    this.getUserLocation()
   },
   onReady: function () {
     this.mapContext = wx.createMapContext('map')
@@ -21,7 +24,6 @@ Page({
     wx.showLoading({
       title: '加载中..'
     })
-    var that = this
     var hasToken = true
     try {
       var value = wx.getStorageSync('token')
@@ -77,8 +79,6 @@ Page({
     }
     
   },
-
-
   //请求服务器检查订单状态,控制不同状态下的界面显示
   checkUserBookingStatus:function(){
     var that=this
@@ -95,14 +95,18 @@ Page({
         } else if (res.data.status == 2) { //该用户当前有预约的订单
           that.showOrder()
           that.getUserLocation()
+          that.setData({
+            markers:[],
+            needMarker:false
+          })
         } else if (res.data.status == 3) { //该用户当前没有预约的订单
+          that.setData({
+            needMarker:true
+          })
           //显示待预约的地图按钮
           that.showPending()
-          //获得用户位置
-          that.getUserLocation()
-          //获得可预约的订单并标记
+          // //获得定位并更新显示可预约图标
           that.getShareOrder()
-          //获取可预约订单并标记
         } else {
           wx.showToast({
             title: '出错了',
@@ -113,6 +117,14 @@ Page({
       }
     })
   },
+
+  // //30秒刷新一次一次倒计时
+  // freshShareOrder:function(){
+  //   var that=this;
+  //   setTimeout(function(){
+  //     that.getShareOrder()
+  //   },1000*30)
+  // },
 
 
   //获得可预约订单并标记
@@ -138,10 +150,12 @@ Page({
               that.setData({
                 markers: res.data.orders
               })
+              // that.freshShareOrder()
             } else {
               wx.showToast({
-                title: '内部错误',
-                icon: 'loading'
+                title: '出错了',
+                icon: 'loading',
+                duration:1000
               })
             }
           }
@@ -149,6 +163,11 @@ Page({
       }
     })
    
+  },
+
+  //用户移动地图时触发
+  regionchange:function(){
+    this.getShareOrder()
   },
 
   //点击某个车位图标时触发
@@ -207,7 +226,7 @@ Page({
       }
     })
   },
-  
+
   //获得用户地理位置
   getUserLocation:function(){
     var that=this
@@ -220,7 +239,25 @@ Page({
               that.getLocation()
             },
             fail(){ //用户拒绝授权,opensetting
-
+                wx.showModal({
+                  title: '提示',
+                  content: '我们需要获得您的位置信息,以便为您提供共享车位的相关服务',
+                  showCancel:false,
+                  confirmColor:'#f4c600',
+                  success:function(res){
+                    if(res.confirm){
+                      wx.openSetting({
+                        success:function(res){
+                          if (res.authSetting['scope.userLocation']){
+                            that.getLocation()
+                          }else{
+                            that.getUserLocation()
+                          }
+                        }
+                      })
+                    }
+                  }
+                })
             }
           })
         }else{ //有地图授权
@@ -237,9 +274,12 @@ Page({
         console.log(res)
         that.setData({
           latitude: res.latitude,
-          longitude: res.longitude
+          longitude: res.longitude,
         })
         that.mapContext.moveToLocation()
+        if (that.data.needMarker){
+          that.getShareOrder()
+        }
       },
       fail: function () {
         wx.showToast({

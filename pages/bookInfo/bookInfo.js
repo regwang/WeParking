@@ -18,6 +18,9 @@ Page({
    */
   onLoad: function (options) {
     var that=this
+    wx.showLoading({
+      title: '加载中..',
+    })
     //根据id获取订单信息
     if(options.orderId){
       //获取订单信息
@@ -25,6 +28,7 @@ Page({
         url: app.globalData.serverUrl +'getOrderInfoById.als',
         data:{id:options.orderId},
         success:function(res){
+          wx.hideLoading()
           console.log(res.data)
             if(res.data.status==0){
               console.log('订单信息')
@@ -40,6 +44,7 @@ Page({
             }
         },
         fail:function(){
+          wx.hideLoading()
           wx.showToast({
             title: '请求失败',
             icon:'loading',
@@ -55,12 +60,12 @@ Page({
         url: app.globalData.serverUrl + 'getOrderInfoByToken.als',
         data: {token:wx.getStorageSync('token'),type:2},
         success: function (res) {
+          wx.hideLoading()
           console.log(res.data)
           if (res.data.status == 0) {
             console.log('订单信息')
             console.log(res.data.order)
             that.updateDataAndText(res.data.order)
-
           } else {
             wx.showToast({
               title: '出错了',
@@ -70,6 +75,7 @@ Page({
           }
         },
         fail: function () {
+          wx.hideLoading()
           wx.showToast({
             title: '请求失败',
             icon: 'loading',
@@ -94,6 +100,7 @@ Page({
             url: app.globalData.serverUrl + 'startAppointOrder.als',
             data: { token: wx.getStorageSync('token'), id: that.data.orderInfo.id },
             success: function (res) {
+              console.log('预约车位:'+res.data.status)
               //预约成功
               if (res.data.status == 0) {
                 wx.switchTab({
@@ -164,37 +171,49 @@ Page({
           wx.request({
             url: app.globalData.serverUrl +'payParking.als',
             data:{id:that.data.orderInfo.id,token:wx.getStorageSync('token')},
-            success:function(res){
-              if(res.data==0){
+            success:function(res1){
+              if(res1.data==0){
                 console.log('创建微信订单的数据:')
-                console.log(res.data)
+                console.log(res1.data)
                 wx.requestPayment({
-                  timeStamp: res.data.timeStamp,
-                  nonceStr: res.data.nonceStr,
-                  package: res.data.package,
+                  timeStamp: res1.data.timeStamp,
+                  nonceStr: res1.data.nonceStr,
+                  package: res1.data.package,
                   signType: 'MD5',
-                  paySign: res.data.paySign,
-                  success:function(res){
+                  paySign: res1.data.paySign,
+                  success:function(res2){
                     console.log('支付成功')
-                    console.log(res)
-                    //更新订单为已完成
-                    wx.request({
-                      url: app.globalData.serverUrl +'updateParkingComplete.als',
-                      data:{id:that.data.orderInfo.id},
-                      success:function(res){
-                        if(res.data.status==0){
-                          wx.navigateBack({
-                            delta: 1
-                          })
-                        }else{
-                          wx.showToast({
-                            title: '订单状态更新失败',
-                            icon:'loading',
-                            duration:1000
-                          })
+                    console.log(res2)
+                    if(res2.errMsg=='requestPayment:ok'){
+                      //更新订单为已完成
+                      wx.request({
+                        url: app.globalData.serverUrl +'updateParkingComplete.als',
+                        data:{id:that.data.orderInfo.id},
+                        success:function(res3){
+                          if(res3.data.status==0){
+                            wx.showModal({
+                              title: '提示',
+                              content: '支付成功,本次订单已完结',
+                              confirmColor:'#f4c600',
+                              showCancel:false,
+                              success:function(res4){
+                                if(res4.confirm){
+                                  wx.navigateBack({
+                                    delta: 1
+                                  })
+                                }
+                              }
+                            })
+                          }else{
+                            wx.showToast({
+                              title: '订单状态更新失败',
+                              icon:'loading',
+                              duration:1000
+                            })
+                          }
                         }
-                      }
-                    })
+                      })
+                    }
                    
                     
                   },
@@ -251,13 +270,33 @@ Page({
         moneyClass:'',
         orderStatusText:'待预约'
       })
+      wx.setNavigationBarTitle({
+        title: '车位信息',
+      })
     }else if(order.status==3){
       this.setData({
         orderInfo: order,
         orderStatusText: '待交付'
       })
-      wx.setNavigationBarTitle({
-        title: '预约信息',
+    }else if(order.status==4){
+      this.setData({
+        orderInfo:order,
+        orderStatusText:'待支付'
+      })
+    }else if(order.status==5){
+      this.setData({
+        orderInfo:order,
+        orderStatusText:'已完成'
+      })
+    }else if(order.status==1 || order.status==6 || order.status==7){
+      this.setData({
+        orderInfo:order,
+        orderStatusText:'已取消'
+      })
+    }else if(order.status==2){
+      this.setData({
+        orderInfo:order,
+        orderStatusText:'已失效'
       })
     }
   }

@@ -17,7 +17,50 @@ Page({
     isChecked:true
   },
   onLoad: function () {
-    new app.WeToast.WeToast()
+    // new app.WeToast.WeToast()
+    
+  },
+  onShow:function(){
+    if (!app.globalData.orderInfo) {
+      wx.getSetting({
+        success: function (res) {
+          if(!res.authSetting['scope.userInfo']){
+            
+            wx.authorize({
+              scope: 'scope.userInfo',
+              success(){
+                //授权成功,更新用户昵称信息
+                app.getUserInfo(function(userInfo){
+                  app.updateUserInfo(userInfo)
+                })
+              },
+              fail(){
+                wx.showModal({
+                  title: '提示',
+                  content: '我们需要您的昵称信息,以便您能正常使用共享车位的服务',
+                  showCancel: false,
+                  confirmColor: '#f4c600',
+                  success: function (res) {
+                    if (res.confirm) {
+                      wx.openSetting({
+                        success: function (res) {
+                          
+                        }
+                      })
+                    }
+                  }
+                })
+              }
+            })
+          }else{
+            //授权成功,更新用户昵称信息
+            app.getUserInfo(function (userInfo) {
+              app.updateUserInfo(userInfo)
+            })
+          }
+        }
+      })
+    }
   },
   getPhone:function(e){
     this.setData({
@@ -34,8 +77,13 @@ Page({
             phoneValue:s
           })
         }else{
-          this.wetoast.toast({
-            title:'手机号不正确!'
+          // this.wetoast.toast({
+          //   title:'手机号不正确!'
+          // })
+          wx.showToast({
+            title: '手机号不正确',
+            icon:'loading',
+            duration:1000
           })
 
         }
@@ -90,12 +138,22 @@ Page({
             url: '/pages/index/index',
           })
         }else if(res.data.status==-1){
-          that.wetoast.toast({
-            title:'验证码错误!'
+          // that.wetoast.toast({
+          //   title:'验证码错误!'
+          // })
+          wx.showToast({
+            title: '验证码错误',
+            icon:'loading',
+            duration:1000
           })
         }else{
-          that.wetoast.toast({
-            title:'系统错误!'
+          // that.wetoast.toast({
+          //   title:'系统错误!'
+          // })
+          wx.showToast({
+            title: '出错了',
+            icon:'loading',
+            duration:1000
           })
         }
       }
@@ -107,10 +165,14 @@ Page({
       url: app.globalData.serverUrl+'sendSMS.als',
       data:{token:wx.getStorageSync('token'),phone:that.data.phoneValue},
       success:function(res){
-        if(res.data.status==-1
-        ){
-          this.wetoast.toast({
-            title:'短信发送失败!'
+        if(res.data.status==-1){
+          // this.wetoast.toast({
+          //   title:'短信发送失败!'
+          // })
+          wx.showToast({
+            title: '短信发送失败',
+            icon:'loading',
+            duration:1000
           })
         }
       }

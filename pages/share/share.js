@@ -27,7 +27,20 @@ Page({
     
   },
   onReady: function () {
-    
+    if(this.data.shareStatus==2){
+      wx.setNavigationBarTitle({
+        title: '基本信息',
+      })
+    }else if(this.data.shareStatus==3){
+      wx.setNavigationBarTitle({
+        title: '共享'
+      })
+    }else if(this.data.shareStatus==4){
+      wx.setNavigationBarTitle({
+        title: '共享停车位'
+      })
+    }
+    this.mapContext = wx.createMapContext('shareMap')
   },
   onShow: function () {
     var that = this
@@ -44,27 +57,17 @@ Page({
           wx.redirectTo({
             url: '/pages/bindPhone/bindPhone'
           })
-        } else if (res.data.status == 2) { //该用户尚未设置车辆信息
-          wx.setNavigationBarTitle({
-            title: '基本信息',
-          })
+        } else if (res.data.status == 2) { //该用户尚未设置车辆信息 
           that.setData({
             shareStatus:2
           })
         } else if (res.data.status == 3) { //该用户当前有共享的订单
-          wx.setNavigationBarTitle({
-            title: '共享'
-          })
           that.setData({
             shareStatus:3
           })
-          that.mapContext = wx.createMapContext('shareMap')
           that.showOrderBtn()
           that.getUserLocation()
         } else if(res.data.status==4){    //该用户当前没有共享的订单
-          wx.setNavigationBarTitle({
-            title: '共享停车位'
-          })
            that.setData({
              shareStatus:4
            })
@@ -84,7 +87,9 @@ Page({
     if (e.controlId == 'currentLocation') {
       this.getUserLocation()
     } else if (e.controlId == 'orderDetail') {
-
+        wx.navigateTo({
+          url: '/pages/shareInfo/shareInfo?type=1',
+        })
     }
   },
 
@@ -352,7 +357,17 @@ Page({
         success:function(res){
           wx.hideLoading()
           if(res.data.status==0){
-            that.onShow()
+            wx.showModal({
+              title: '提示',
+              content: '车位发布成功',
+              showCancel:false,
+              confirmColor:'#f4c600',
+              success:function(res2){
+                if(res2.confirm){
+                  that.onShow()
+                }
+              }
+            })
           }else{
             wx.showToast({
               title: '出错了',

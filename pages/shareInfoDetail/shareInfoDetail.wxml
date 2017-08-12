@@ -1,37 +1,55 @@
-<!--bookInfo.wxml-->
+<!--shareInfoDetail.wxml-->
 <view class="info_view">
-  <view class="one_info">
-    <view class="one_info_view">
-      <text class="subject_text">共享人</text>
-      <text class="main_text">{{orderInfo.sharingName}}</text>
+  <block wx:if="{{orderInfo.status==3 || orderInfo.status==4 || orderInfo.status==5 || orderInfo.status==6 || orderInfo.status==7}}">
+    <view class="one_info">
+      <view class="one_info_view">
+        <text class="subject_text">预约人</text>
+        <text class="main_text">{{orderInfo.appointName}}</text>
+      </view>
+      <view class="line"></view>
     </view>
-    <view class="line"></view>
-  </view>
+  </block>
   <block wx:if="{{orderInfo.status==3 || orderInfo.status==4}}">
     <view class="one_info">
       <view class="one_info_view">
         <text class="subject_text">车牌号码</text>
-        <text class="main_text">{{orderInfo.carNumber}}</text>
+        <text class="main_text">{{orderInfo.appointCarNumber}}</text>
       </view>
       <view class="line"></view>
     </view>
     <view class="one_info">
       <view class="one_info_view">
         <text class="subject_text">车辆颜色</text>
-        <text class="main_text">{{orderInfo.carColor}}</text>
+        <text class="main_text">{{orderInfo.appointCarColor}}</text>
       </view>
       <view class="line"></view>
     </view>
   </block>
-  <block wx:if="{{orderInfo.status==0}}">
+  <block wx:if="{{orderInfo.status==3 || orderInfo.status==4 || orderInfo.status==5 || orderInfo.status==6 || orderInfo.status==7}}">
+    <view class="one_info">
+      <view class="one_info_view">
+        <text class="subject_text">预约时间</text>
+        <text class="main_text">{{orderInfo.appointmentTime}}</text>
+      </view>
+      <view class="line"></view>
+    </view>
+  </block>
+  <view class="one_info">
+      <view class="one_info_view">
+        <text class="subject_text">共享时间</text>
+        <text class="main_text">{{orderInfo.sharingTime}}</text>
+      </view>
+      <view class="line"></view>
+    </view>
+  <block wx:if="{{orderInfo.status==0 || orderInfo.status==1 || orderInfo.status==2}}">
     <view class="one_info">
       <view class="one_info_view">
         <text class="subject_text">离场时间</text>
         <text class="main_text">{{orderInfo.leaveTime}}</text>
       </view>
-      <view class="line"></view>
+      <view class="{{leaveClass}}"></view>
     </view>
-    <view class="one_info">
+    <!-- <view class="one_info">
       <view class="one_info_view">
         <text class="subject_text">剩余时间</text>
         <text class="main_text">{{orderInfo.minute}}分钟</text>
@@ -44,16 +62,7 @@
         <text class="light_text">{{orderInfo.money}}元</text>
       </view>
       <view class="{{moneyClass}}"></view>
-    </view>
-  </block>
-  <block wx:if="{{orderInfo.status==3 || orderInfo.status==4 || orderInfo.status==5 || orderInfo.status==6 || orderInfo.status==7}}">
-    <view class="one_info">
-      <view class="one_info_view">
-        <text class="subject_text">预约时间</text>
-        <text class="main_text">{{orderInfo.appointmentTime}}</text>
-      </view>
-      <view class="line"></view>
-    </view>
+    </view> -->
   </block>
   <block wx:if="{{orderInfo.status==5}}">
     <view class="one_info">
@@ -84,27 +93,27 @@
 </view>
 <block wx:if="{{orderInfo.status==0}}">
   <view class="book">
-    <button bindtap="bookOrder" type="primary" style="background-color:#f4c600;">预约</button>
+    <button bindtap="cancleShare" type="primary" style="background-color:#f4c600;">取消共享</button>
   </view>
 </block>
- <block wx:if="{{orderInfo.status==4}}"> 
+<block wx:if="{{orderInfo.status==3}}">
   <view class="book">
-    <button bindtap="wechatPay" type="primary" style="background-color:#f4c600;">微信支付</button>
+    <button bindtap="giveParking" type="primary" style="background-color:#f4c600;">交付车位</button>
   </view>
- </block> 
+</block>
  <block wx:if="{{orderInfo.status==3 || orderInfo.status==4}}"> 
   <view class="book">
     <button bindtap="callUser" type="primary" plain="true" style="color:#f4c600;background-color:#ffffff;border-color:#f4c600">电话联系</button>
   </view>
  </block> 
- <block wx:if="{{orderInfo.status==3 || orderInfo.status==4}}"> 
+ <block wx:if="{{orderInfo.status==3}}"> 
   <view class="book">
-    <button bindtap="orderDetail" type="primary" plain="true" style="color:#b2b2b2;background-color:#ffffff;border-color:#b2b2b2">订单详情</button>
+    <button bindtap="submitComment" type="primary" plain="true" style="color:#b2b2b2;background-color:#ffffff;border-color:#b2b2b2">订单有异议</button>
   </view>
  </block> 
-<!-- <view class="book">
-  <button type="primary" plain="true" style="color:#b2b2b2;background-color:#ffffff;border-color:#b2b2b2">订单有异议</button>
-</view>
-<view class="book">
-  <button type="primary" plain="true" style="color:#b2b2b2;background-color:#ffffff;border-color:#b2b2b2">举报</button>
-</view> -->
+<block wx:if="{{orderInfo.status==4}}">
+  <view class="book">
+    <button bindtap="submitReport" type="primary" plain="true" style="color:#b2b2b2;background-color:#ffffff;border-color:#b2b2b2">举报</button>
+  </view> 
+</block>
+

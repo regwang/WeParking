@@ -5,7 +5,7 @@
     <view class="phone">
       <text class="main_text first_text">手机号码</text>
       <input class="hint_text second_text" bindinput="getPhone" placeholder="填写手机号码" placeholder-class="hint_text" maxlength="11" type="number" />
-      <button size="mini" type="primary" bindtap="sendCode" disabled="{{codeDisable}}" style="background-color:#f4c600;width:150rpx;">{{sendCodeText}}</button>
+      <button  type="primary" bindtap="sendCode" disabled="{{codeDisable}}" style="background-color:#f4c600;width:150rpx;font-size:30rpx;">{{sendCodeText}}</button>
     </view>
     <view class="line"></view>
     <view class="phone">

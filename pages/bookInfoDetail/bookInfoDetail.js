@@ -18,6 +18,9 @@ Page({
    */
   onLoad: function (options) {
     var that = this
+    wx.showLoading({
+      title: '加载中..',
+    })
     //根据id获取订单信息
     if (options.orderId) {
       //获取订单信息
@@ -25,6 +28,7 @@ Page({
         url: app.globalData.serverUrl + 'getOrderInfoById.als',
         data: { id: options.orderId },
         success: function (res) {
+          wx.hideLoading()
           console.log(res.data)
           if (res.data.status == 0) {
             console.log('订单信息')
@@ -40,6 +44,7 @@ Page({
           }
         },
         fail: function () {
+          wx.hideLoading()
           wx.showToast({
             title: '请求失败',
             icon: 'loading',
@@ -55,6 +60,7 @@ Page({
         url: app.globalData.serverUrl + 'getOrderInfoByToken.als',
         data: { token: wx.getStorageSync('token'), type: 2 },
         success: function (res) {
+          wx.hideLoading()
           console.log(res.data)
           if (res.data.status == 0) {
             console.log('订单信息')
@@ -70,6 +76,7 @@ Page({
           }
         },
         fail: function () {
+          wx.hideLoading()
           wx.showToast({
             title: '请求失败',
             icon: 'loading',
@@ -116,8 +123,25 @@ Page({
         orderInfo: order,
         orderStatusText: '待交付'
       })
-      wx.setNavigationBarTitle({
-        title: '预约信息',
+    } else if (order.status == 4) {
+      this.setData({
+        orderInfo: order,
+        orderStatusText: '待支付'
+      })
+    } else if (order.status == 5) {
+      this.setData({
+        orderInfo: order,
+        orderStatusText: '已完成'
+      })
+    } else if (order.status == 1 || order.status == 6 || order.status == 7) {
+      this.setData({
+        orderInfo: order,
+        orderStatusText: '已取消'
+      })
+    } else if (order.status == 2) {
+      this.setData({
+        orderInfo: order,
+        orderStatusText: '已失效'
       })
     }
   }

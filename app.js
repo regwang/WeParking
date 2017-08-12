@@ -55,6 +55,7 @@ App({
       }
     })
   },
+
   updateUserInfo:function(userInfo){
     var that=this
     wx.request({

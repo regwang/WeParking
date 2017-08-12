@@ -7,7 +7,10 @@
     "pages/my/my",
     "pages/bookInfo/bookInfo",
     "pages/bookInfoDetail/bookInfoDetail",
-    "pages/reportOrder/reportOrder"
+    "pages/reportOrder/reportOrder",
+    "pages/shareInfo/shareInfo",
+    "pages/shareInfoDetail/shareInfoDetail",
+    "pages/carLocation/carLocation"
   ],
   "tabBar": {
     "list": [
