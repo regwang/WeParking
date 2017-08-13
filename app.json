@@ -10,7 +10,9 @@
     "pages/reportOrder/reportOrder",
     "pages/shareInfo/shareInfo",
     "pages/shareInfoDetail/shareInfoDetail",
-    "pages/carLocation/carLocation"
+    "pages/carLocation/carLocation",
+    "pages/webView/webView",
+    "pages/bookInfoModal/bookInfoModal"
   ],
   "tabBar": {
     "list": [

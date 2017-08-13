@@ -1,9 +1,5 @@
 <!--share.wxml-->
-<!-- <map id='shareMap' class='map_style'  latitude="{{latitude}}" longitude="{{longitude}}" bindcontroltap="bindcontroltap"   controls="{{controls}}" show-location /> -->
-
-<!-- <import src='/pages/share/template/shareTemplate.wxml' /> -->
 <block wx:if='{{shareStatus==2}}'>
-  <!-- <template is="bindCar"></template> -->
   <view class="page_order">
     <view class="carHint hint_text">
       <text>在进行车位共享前,需要完善车辆信息</text>
@@ -49,7 +45,7 @@
     <!-- <map id='shareMap2' class='map_style2' bindtap="testmap"  latitude="{{latitude}}" longitude="{{longitude}}" bindcontroltap="bindcontroltap"   controls="{{controls}}" show-location /> -->
   </view>
   <view class="map_area">
-    <input class="inputMin main_text" bindinput="bindAddressRemark" placeholder="在此次输入位置的备注信息" placeholder-class="hint_text"  type="text" />
+    <input class="inputMin main_text" bindinput="bindAddressRemark" placeholder="在此输入位置的备注信息" placeholder-class="hint_text"  type="text" />
   </view>
   <view class="share_area">
     <button type="primary" bindtap="sharingParking" style="background-color:#f4c600">发布</button>

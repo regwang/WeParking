@@ -64,7 +64,7 @@ App({
       success:function(res){
         if(res.data.status==-1){
           wx.showToast({
-            title: '获取用户信息失败',
+            title: '出错了',
           })
         }
       }

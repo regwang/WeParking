@@ -172,9 +172,7 @@ Page({
             url: app.globalData.serverUrl +'payParking.als',
             data:{id:that.data.orderInfo.id,token:wx.getStorageSync('token')},
             success:function(res1){
-              if(res1.data==0){
-                console.log('创建微信订单的数据:')
-                console.log(res1.data)
+              if(res1.data.status==0){
                 wx.requestPayment({
                   timeStamp: res1.data.timeStamp,
                   nonceStr: res1.data.nonceStr,
@@ -182,18 +180,19 @@ Page({
                   signType: 'MD5',
                   paySign: res1.data.paySign,
                   success:function(res2){
-                    console.log('支付成功')
-                    console.log(res2)
                     if(res2.errMsg=='requestPayment:ok'){
-                      //更新订单为已完成
                       wx.request({
                         url: app.globalData.serverUrl +'updateParkingComplete.als',
                         data:{id:that.data.orderInfo.id},
                         success:function(res3){
+                          wx.showModal({
+                            title: '提示',
+                            content: res3.data.status+'',
+                          })
                           if(res3.data.status==0){
                             wx.showModal({
                               title: '提示',
-                              content: '支付成功,本次订单已完结',
+                              content: '感谢使用,本次订单已完结',
                               confirmColor:'#f4c600',
                               showCancel:false,
                               success:function(res4){
@@ -206,7 +205,7 @@ Page({
                             })
                           }else{
                             wx.showToast({
-                              title: '订单状态更新失败',
+                              title: '状态更新失败',
                               icon:'loading',
                               duration:1000
                             })
@@ -218,12 +217,10 @@ Page({
                     
                   },
                   fail:function(res){
-                    console.log('支付失败')
-                    console.log(res)
+                    
                   },
                   complete:function(res){
-                    console.log('支付完成')
-                    console.log(res)
+                    
                   }
                 })
               }else{

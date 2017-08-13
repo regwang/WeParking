@@ -24,7 +24,36 @@ Page({
     addressRemark:''
   },
   onLoad: function () {
-    
+    if (wx.canIUse('getSystemInfoSync.return.SDKVersion')) {
+      //获得微信版本信息,检测兼容性
+      var res = wx.getSystemInfoSync()
+      var sdk = parseInt(res.SDKVersion.replace(/\./g, ''))
+      if (sdk < 125) {
+        wx.showModal({
+          title: '提示',
+          content: '您的微信版本偏低,建议您升级您的微信,以体验闪泊停车的完整服务',
+          showCancel: false,
+          confirmColor: '#f4c600',
+          success: function (res) {
+            if (res.confirm) {
+
+            }
+          }
+        })
+      }
+    } else {
+      wx.showModal({
+        title: '提示',
+        content: '您的微信版本偏低,建议您升级您的微信,以体验闪泊停车的完整服务',
+        showCancel: false,
+        confirmColor: '#f4c600',
+        success: function (res) {
+          if (res.confirm) {
+
+          }
+        }
+      })
+    }
   },
   onReady: function () {
     if(this.data.shareStatus==2){
@@ -68,9 +97,9 @@ Page({
           that.showOrderBtn()
           that.getUserLocation()
         } else if(res.data.status==4){    //该用户当前没有共享的订单
-           that.setData({
-             shareStatus:4
-           })
+          that.setData({
+            shareStatus:4
+          })
         }else {
           wx.showToast({
             title: '出错了',
@@ -78,6 +107,19 @@ Page({
             duration: 1000
           })
         }
+      },
+      fail:function(){
+        wx.showModal({
+          title: '提示',
+          content: '网络不太通畅,请稍后再试',
+          showCancel:false,
+          confirmColor:'#f4c600',
+          success:function(res){
+            if(res.confirm){
+              
+            }
+          }
+        })
       }
     })
   },

@@ -18,9 +18,6 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-      wx.showLoading({
-        title: '加载中..',
-      })
       //举报
       if(options.status==6){
         wx.setNavigationBarTitle({
@@ -32,7 +29,6 @@ Page({
           id:options.id,
           reportUser:options.reportUser
         })
-        wx.hideLoading()
       }else if (options.status == 7) {
         wx.setNavigationBarTitle({
           title: '异议',
@@ -43,11 +39,9 @@ Page({
           id: options.id,
           reportUser: options.reportUser
         })
-        wx.hideLoading()
       }
   },
   confirmInput:function(e){
-    console.log('testjinq')
     this.setData({
       reportValue:e.detail.value
     })

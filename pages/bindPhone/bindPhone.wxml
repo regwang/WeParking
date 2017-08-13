@@ -18,7 +18,7 @@
         <checkbox value="1" checked="true" color="#f4c600" />
       </checkbox-group>
       <text class="hint_text agreement_text">我已阅读并同意</text>
-      <text class="main_text agreement_text">《用户注册协议》</text>
+      <text bindtap="getAgreement" class="main_text agreement_text">《用户注册协议》</text>
   </view>
   <view class="signup_area">
     <button disabled="{{signupDisable}}" bindtap="signup" size="default" type="primary" style="background-color:#f4c600">完成</button>

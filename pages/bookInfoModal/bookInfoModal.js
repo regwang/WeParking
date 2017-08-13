@@ -1,4 +1,4 @@
-// bookInfoDetail.js
+// bookInfoModal.js
 
 var app = getApp()
 
@@ -66,7 +66,6 @@ Page({
             console.log('订单信息')
             console.log(res.data.order)
             that.updateDataAndText(res.data.order)
-
           } else {
             wx.showToast({
               title: '出错了',
@@ -88,6 +87,78 @@ Page({
 
   },
 
+  //预约车位
+  bookOrder: function () {
+    var that = this
+    wx.showModal({
+      title: '提示',
+      content: '预约后将无法取消,请慎重下单',
+      confirmColor: '#f4c600',
+      success: function (res) {
+        if (res.confirm) {
+          wx.request({
+            url: app.globalData.serverUrl + 'startAppointOrder.als',
+            data: { token: wx.getStorageSync('token'), id: that.data.orderInfo.id },
+            success: function (res) {
+              console.log('预约车位:' + res.data.status)
+              //预约成功
+              if (res.data.status == 0) {
+                wx.switchTab({
+                  url: '/pages/index/index',
+                })
+              } else if (res.data.status == -1) {
+                wx.showToast({
+                  title: '出错了',
+                  icon: 'loading',
+                  duration: 1000
+                })
+              }
+              //车位已经被取消
+              else if (res.data.status == -2) {
+                wx.showModal({
+                  title: '提示',
+                  content: '该车位已被取消',
+                  showCancel: false,
+                  confirmColor: '#f4c600',
+                  success: function (res) {
+                    if (res.confirm) {
+                      wx.navigateBack({
+                        delta: 1
+                      })
+                    }
+                  }
+                })
+              }
+              //车位已经被预约
+              else if (res.data.status == -3) {
+                wx.showModal({
+                  title: '提示',
+                  content: '该车位已被预约',
+                  showCancel: false,
+                  confirmColor: '#f4c600',
+                  success: function (res) {
+                    if (res.confirm) {
+                      wx.navigateBack({
+                        delta: 1
+                      })
+                    }
+                  }
+                })
+              }
+            },
+            fail: function () {
+              wx.showToast({
+                title: '出错了',
+                icon: 'loading',
+                duration: 1000
+              })
+            }
+          })
+        }
+      }
+    })
+
+  },
   //微信支付
   wechatPay: function () {
     var that = this
@@ -172,7 +243,6 @@ Page({
       }
     })
   },
-
   //打电话给共享人
   callUser: function () {
     var that = this
@@ -180,18 +250,18 @@ Page({
       phoneNumber: that.data.orderInfo.sharingPhone
     })
   },
-  //订单有异议
-  submitComment:function(){
-    var that=this
-    wx.navigateTo({
-      url: '/pages/reportOrder/reportOrder?status=7&reportUser=2&id='+that.data.orderInfo.id,
+  //查看订单详情
+  orderDetail: function () {
+    var that = this
+    wx.redirectTo({
+      url: '/pages/bookInfoDetail/bookInfoDetail?orderId=' + that.data.orderInfo.id,
     })
   },
-  //举报
-  submitReport:function(){
-    var that = this
-    wx.navigateTo({
-      url: '/pages/reportOrder/reportOrder?status=6&reportUser=2&id=' + that.data.orderInfo.id,
+
+  //关闭本页面
+  close_page:function(){
+    wx.switchTab({
+      url: '/pages/index/index',
     })
   },
 
@@ -201,7 +271,11 @@ Page({
     if (order.status == 0) {
       this.setData({
         orderInfo: order,
+        moneyClass: '',
         orderStatusText: '待预约'
+      })
+      wx.setNavigationBarTitle({
+        title: '车位信息',
       })
     } else if (order.status == 3) {
       this.setData({

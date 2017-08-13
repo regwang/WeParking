@@ -44,7 +44,14 @@ Page({
                     if (res.confirm) {
                       wx.openSetting({
                         success: function (res) {
-                          
+                          if (!res.authSetting['scope.userInfo']){
+                            that.onShow()
+                          }else{
+                            //授权成功,更新用户昵称信息
+                            app.getUserInfo(function (userInfo) {
+                              app.updateUserInfo(userInfo)
+                            })
+                          }
                         }
                       })
                     }
@@ -174,13 +181,14 @@ Page({
             icon:'loading',
             duration:1000
           })
+        }else{
+          that.setData({
+            isSend:true
+          })
+          that.countDown()
         }
       }
     })
-    this.setData({
-      isSend:true
-    })
-    this.countDown()
   },
   countDown:function(){
     var times = 60;
@@ -202,6 +210,11 @@ Page({
         })
       }
     }, 1000)
+  },
+  getAgreement:function(){
+    wx.navigateTo({
+      url: '/pages/webView/webView?contentType=1',
+    })
   }
  
 })

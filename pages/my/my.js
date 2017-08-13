@@ -14,14 +14,36 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    var that = this
-    //调用应用实例的方法获取全局数据
-    app.getUserInfo(function (userInfo) {
-      //更新数据
-      that.setData({
-        userInfo: userInfo
+    if (wx.canIUse('getSystemInfoSync.return.SDKVersion')) {
+      //获得微信版本信息,检测兼容性
+      var res = wx.getSystemInfoSync()
+      var sdk = parseInt(res.SDKVersion.replace(/\./g, ''))
+      if (sdk < 125) {
+        wx.showModal({
+          title: '提示',
+          content: '您的微信版本偏低,建议您升级您的微信,以体验闪泊停车的完整服务',
+          showCancel: false,
+          confirmColor: '#f4c600',
+          success: function (res) {
+            if (res.confirm) {
+
+            }
+          }
+        })
+      }
+    } else {
+      wx.showModal({
+        title: '提示',
+        content: '您的微信版本偏低,建议您升级您的微信,以体验闪泊停车的完整服务',
+        showCancel: false,
+        confirmColor: '#f4c600',
+        success: function (res) {
+          if (res.confirm) {
+
+          }
+        }
       })
-    })
+    }
   },
   bindViewTap:function(){
     wx.navigateTo({
@@ -40,7 +62,14 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-  
+    var that = this
+    //调用应用实例的方法获取全局数据
+    app.getUserInfo(function (userInfo) {
+      //更新数据
+      that.setData({
+        userInfo: userInfo
+      })
+    })
   },
 
   /**

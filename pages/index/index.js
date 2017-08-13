@@ -7,19 +7,48 @@ Page({
     controls:[],
     markers:[],
     needMarker:false,
-    needLocation:true,
+    locationTimes:0,
     latitude: 39.91543309328607,
     longitude: 116.45597668647765,
     countDown:60
   },
   onLoad: function () {
-    this.getUserLocation()
+    if (wx.canIUse('getSystemInfoSync.return.SDKVersion')) {
+      //获得微信版本信息,检测兼容性
+      var res = wx.getSystemInfoSync()
+      var sdk = parseInt(res.SDKVersion.replace(/\./g, ''))
+      if (sdk < 125) {
+        wx.showModal({
+          title: '提示',
+          content: '您的微信版本偏低,建议您升级您的微信,以体验闪泊停车的完整服务',
+          showCancel: false,
+          confirmColor: '#f4c600',
+          success: function (res) {
+            if (res.confirm) {
+
+            }
+          }
+        })
+      } 
+    } else {
+      wx.showModal({
+        title: '提示',
+        content: '您的微信版本偏低,建议您升级您的微信,以体验闪泊停车的完整服务',
+        showCancel: false,
+        confirmColor: '#f4c600',
+        success: function (res) {
+          if (res.confirm) {
+
+          }
+        }
+      })
+    }
   },
   onReady: function () {
     this.mapContext = wx.createMapContext('map')
   },
 
-  onShow:function () {
+  onShow:function () { 
     var that = this
     wx.showLoading({
       title: '加载中..'
@@ -57,7 +86,7 @@ Page({
           })
         }
       })
-    }else{
+    } else {
       wx.login({
         success: function (res) {
           if (res.code) {
@@ -77,7 +106,6 @@ Page({
         }
       })
     }
-    
   },
   //请求服务器检查订单状态,控制不同状态下的界面显示
   checkUserBookingStatus:function(){
@@ -106,7 +134,11 @@ Page({
           //显示待预约的地图按钮
           that.showPending()
           // //获得定位并更新显示可预约图标
-          that.getShareOrder()
+          if (that.data.locationTimes==0){
+            that.getUserLocation()
+          }else{
+            that.getShareOrder()
+          }
         } else {
           wx.showToast({
             title: '出错了',
@@ -183,7 +215,7 @@ Page({
       this.getUserLocation()
     }else if(e.controlId=='orderDetail'){
       wx.navigateTo({
-        url: '/pages/bookInfo/bookInfo?type=2',
+        url: '/pages/bookInfoModal/bookInfoModal?type=2',
       })
     }else if(e.controlId=='chooseTime_5'){
       this.setData({
@@ -237,6 +269,9 @@ Page({
             scope: 'scope.userLocation',
             success(res) { //用户同意授权
               that.getLocation()
+              that.setData({
+                locationTimes:1
+              })
             },
             fail(){ //用户拒绝授权,opensetting
                 wx.showModal({
@@ -248,11 +283,11 @@ Page({
                     if(res.confirm){
                       wx.openSetting({
                         success:function(res){
-                          if (res.authSetting['scope.userLocation']){
-                            that.getLocation()
-                          }else{
-                            that.getUserLocation()
-                          }
+                          // if (res.authSetting['scope.userLocation']){
+                          //   that.getLocation()
+                          // }else{
+                          //   that.getUserLocation()
+                          // }
                         }
                       })
                     }
@@ -262,6 +297,9 @@ Page({
           })
         }else{ //有地图授权
           that.getLocation()
+          that.setData({
+            locationTimes: 1
+          })
         }
       }
     })
