@@ -133,7 +133,7 @@ Page({
       this.getUserLocation()
     } else if (e.controlId == 'orderDetail') {
         wx.navigateTo({
-          url: '/pages/shareInfo/shareInfo?type=1',
+          url: '/pages/shareInfoModal/shareInfoModal?type=1',
         })
     }
   },

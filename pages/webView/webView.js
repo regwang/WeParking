@@ -72,7 +72,29 @@ Page({
     }
     //获得关于我们内容
     else if(contentType==2){
-
+      wx.request({
+        url: app.globalData.serverUrl + 'getAboutUS.als',
+        success: function (res) {
+          if (res.data.status == 0) {
+            wx.hideLoading()
+            WxParse.wxParse('content', 'html', res.data.result, that, 5);
+          } else {
+            wx.hideLoading()
+            wx.showToast({
+              title: '出错了',
+              icon: 'loading',
+              duration: 1000
+            })
+          }
+        }, fail: function () {
+          wx.hideLoading()
+          wx.showToast({
+            title: '出错了',
+            icon: 'loading',
+            duration: 1000
+          })
+        }
+      })
     }else{
       wx.hideLoading()
     }

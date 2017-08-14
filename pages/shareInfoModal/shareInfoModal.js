@@ -62,10 +62,7 @@ Page({
           wx.hideLoading()
           console.log(res.data)
           if (res.data.status == 0) {
-            console.log('订单信息')
-            console.log(res.data.order)
             that.updateDataAndText(res.data.order)
-
           } else {
             wx.showToast({
               title: '出错了',
