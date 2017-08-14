@@ -1,4 +1,4 @@
-/* bookInfoModal.wxss */
+/* shareInfoModal.wxss */
 Page{
   background-color: #f0f0f0;
   background-image:url('https://www.rankyoo.com/image/map_bg.png');

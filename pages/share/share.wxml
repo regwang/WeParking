@@ -21,7 +21,7 @@
   </view>
 </block>
 <block wx:elif='{{shareStatus==3}}'>
-  <map id='shareMap' class='map_style'  latitude="{{latitude}}" longitude="{{longitude}}" bindcontroltap="bindcontroltap"   controls="{{controls}}" show-location />
+  <map id='shareMap' class='map_style'  latitude="{{latitude}}" longitude="{{longitude}}" bindcontroltap="bindcontroltap"   controls="{{controls}}" markers="{{markers}}" include-points="{{includePoints}}" show-location />
 </block>
 <block wx:elif='{{shareStatus==4}}'>
   <!-- <template is="shareParking"></template> -->

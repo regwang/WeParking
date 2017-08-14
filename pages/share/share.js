@@ -5,7 +5,10 @@ Page({
   data: {
     shareStatus:3,
     windowHeight: 0,
+    windowWidth: 0,
     controls: [],
+    markers:[],
+    includePoints:[],
     latitude: 39.91543309328607,
     longitude: 116.45597668647765,
     carNumber: "",
@@ -162,58 +165,92 @@ Page({
     wx.getLocation({
       type: 'gcj02',
       success: function (res) {
-        console.log(res)
-        that.setData({
-          latitude: res.latitude,
-          longitude: res.longitude
-        })
-        that.mapContext.moveToLocation()
+        // that.setData({
+        //   latitude: res.latitude,
+        //   longitude: res.longitude
+        // })
+        // that.mapContext.moveToLocation()
+        that.getUserOrderMark(res.latitude, res.longitude)
       },
       fail: function () {
         console.log('获取定位失败')
       }
     })
   },
-  //已共享状态时,地图界面显示的按钮
-  showOrderBtn: function () {
+
+
+  //获得用户订单信息
+  getUserOrderMark: function (latitude, longitude) {
     var that = this
-    wx.getSystemInfo({
+    //获取订单信息
+    wx.request({
+      url: app.globalData.serverUrl + 'getOrderInfoByToken.als',
+      data: { token: wx.getStorageSync('token'), type: 1 },
       success: function (res) {
-        that.setData({
-          controls: [
-            {
-              id: "currentLocation",
-              iconPath: "/icon/location.png",
-              position: { left: 10, top: res.windowHeight - 80, width: 50, height: 50 },
-              clickable: true
-            },
-            {
-              id: "orderDetail",
-              iconPath: "/icon/sharedBtn.png",
-              position: { left: (res.windowWidth - 150) / 2, top: res.windowHeight - 80, width: 150, height: 50 },
-              clickable: true
-            }
-          ]
+        console.log(res.data)
+        if (res.data.status == 0) {
+          console.log(res.data.order)
+          that.setData({
+            includePoints: [{ latitude: latitude, longitude: longitude }, { latitude: res.data.order.latitude, longitude: res.data.order.longitude }],
+            markers: [{ latitude: res.data.order.latitude, longitude: res.data.order.longitude, iconPath: '/icon/parking.png', width: 50, height: 50 }]
+          })
+        } else {
+          wx.showToast({
+            title: '出错了',
+            icon: 'loading',
+            duration: 1000
+          })
+        }
+      },
+      fail: function () {
+        wx.hideLoading()
+        wx.showToast({
+          title: '请求失败',
+          icon: 'loading',
+          duration: 1000
         })
       }
     })
   },
+
+  //已共享状态时,地图界面显示的按钮
+  showOrderBtn: function () {
+    var that = this
+    var res = wx.getSystemInfoSync()
+    this.setData({
+      windowHeight: res.windowHeight,
+      windowWidth: res.windowWidth
+    })
+    that.setData({
+      controls: [
+        {
+          id: "currentLocation",
+          iconPath: "/icon/location.png",
+          position: { left: 10, top: that.data.windowHeight - 80, width: 50, height: 50 },
+          clickable: true
+        },
+        {
+          id: "orderDetail",
+          iconPath: "/icon/sharedBtn.png",
+          position: { left: (that.data.windowWidth - 150) / 2, top: that.data.windowHeight - 80, width: 150, height: 50 },
+          clickable: true
+        }
+      ]
+    })
+   
+  },
   //未共享状态,车位发布时，地图界面显示的按钮
   showShareBtn:function(){
     var that = this
-    wx.getSystemInfo({
-      success: function (res) {
-        that.setData({
-          controls: [
-            {
-              id: "currentLocation",
-              iconPath: "/icon/location.png",
-              position: { left: 10, top: res.windowHeight-480, width: 50, height: 50 },
-              clickable: true
-            }
-          ]
-        })
-      }
+    that.setData({
+      controls: [
+        {
+          id: "currentLocation",
+          iconPath: "/icon/location.png",
+          position: { left: 10, top: showShareBtn.windowHeight-480, width: 50, height: 50 },
+          clickable: true
+        }
+      ]
     })
   },
   getCarNumber: function (e) {

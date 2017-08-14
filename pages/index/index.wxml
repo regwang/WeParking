@@ -1,3 +1,3 @@
 <!--index.wxml-->
 
-<map id='map' class='map_style'  latitude="{{latitude}}" longitude="{{longitude}}" bindcontroltap="bindcontroltap" bindmarkertap="markertap"  bindregionchange="regionchange" markers="{{markers}}"   controls="{{controls}}" show-location />  
+<map id='map' class='map_style'  latitude="{{latitude}}" longitude="{{longitude}}" bindcontroltap="bindcontroltap" bindmarkertap="markertap"  bindregionchange="regionchange" markers="{{markers}}"   controls="{{controls}}" include-points="{{includePoints}}" show-location />  

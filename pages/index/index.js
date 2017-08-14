@@ -4,10 +4,12 @@ var app = getApp()
 Page({
   data: {
     windowHeight:0,
+    windowWidth:0,
     controls:[],
     markers:[],
-    needMarker:false,
+    includePoints:[],
     locationTimes:0,
+    userStatus:0,
     latitude: 39.91543309328607,
     longitude: 116.45597668647765,
     countDown:60
@@ -16,6 +18,10 @@ Page({
     if (wx.canIUse('getSystemInfoSync.return.SDKVersion')) {
       //获得微信版本信息,检测兼容性
       var res = wx.getSystemInfoSync()
+      this.setData({
+        windowHeight:res.windowHeight,
+        windowWidth:res.windowWidth
+      })
       var sdk = parseInt(res.SDKVersion.replace(/\./g, ''))
       if (sdk < 125) {
         wx.showModal({
@@ -30,7 +36,12 @@ Page({
           }
         })
       } 
-    } else {
+    }else {
+      var res = wx.getSystemInfoSync()
+      this.setData({
+        windowHeight: res.windowHeight,
+        windowWidth: res.windowWidth
+      })
       wx.showModal({
         title: '提示',
         content: '您的微信版本偏低,建议您升级您的微信,以体验闪泊停车的完整服务',
@@ -121,15 +132,15 @@ Page({
             url: '/pages/bindPhone/bindPhone',
           })
         } else if (res.data.status == 2) { //该用户当前有预约的订单
-          that.showOrder()
-          that.getUserLocation()
           that.setData({
             markers:[],
-            needMarker:false
+            userStatus:2
           })
+          that.showOrder()
+          that.getUserLocation()
         } else if (res.data.status == 3) { //该用户当前没有预约的订单
           that.setData({
-            needMarker:true
+            userStatus:3
           })
           //显示待预约的地图按钮
           that.showPending()
@@ -199,11 +210,14 @@ Page({
 
   //用户移动地图时触发
   regionchange:function(){
-    this.getShareOrder()
+    if(this.data.userStatus==3){
+      this.getShareOrder()
+    }
   },
 
   //点击某个车位图标时触发
   markertap:function(e){
+    console.log('来了')
     wx.navigateTo({
       url: '/pages/bookInfo/bookInfo?orderId='+e.markerId,
     })
@@ -269,9 +283,11 @@ Page({
             scope: 'scope.userLocation',
             success(res) { //用户同意授权
               that.getLocation()
-              that.setData({
-                locationTimes:1
-              })
+              if(that.data.userStatus==3){
+                that.setData({
+                  locationTimes:1
+                })
+              }
             },
             fail(){ //用户拒绝授权,opensetting
                 wx.showModal({
@@ -309,14 +325,15 @@ Page({
     wx.getLocation({
       type: 'gcj02',
       success: function (res) {
-        console.log(res)
-        that.setData({
-          latitude: res.latitude,
-          longitude: res.longitude,
-        })
-        that.mapContext.moveToLocation()
-        if (that.data.needMarker){
+        if(that.data.userStatus==3){
+          that.setData({
+            latitude: res.latitude,
+            longitude: res.longitude,
+          })
+          that.mapContext.moveToLocation()
           that.getShareOrder()
+        }else if(that.data.userStatus==2){
+          that.getUserOrderMark(res.latitude,res.longitude)
         }
       },
       fail: function () {
@@ -327,177 +344,203 @@ Page({
     })
   },
 
-  //显示待预约状态时,地图界面显示的按钮
-  showPending:function(){
-    var that = this
-    wx.getSystemInfo({
+  //获得用户订单信息
+  getUserOrderMark:function(latitude,longitude){
+    var that=this
+    //获取订单信息
+    wx.request({
+      url: app.globalData.serverUrl + 'getOrderInfoByToken.als',
+      data: { token: wx.getStorageSync('token'), type: 2 },
       success: function (res) {
-        if (that.data.countDown==60){
+        console.log(res.data)
+        if (res.data.status == 0) {
+          console.log(res.data.order)
           that.setData({
-            controls: [
-              {
-                id: "currentLocation",
-                iconPath: "/icon/location.png",
-                position: { left: 10, top: res.windowHeight - 80, width: 50, height: 50 },
-                clickable: true
-              },
-              {
-                id: "chooseTime_15",
-                iconPath: "/icon/min_choose_15.png",
-                position: { left: (res.windowWidth - 50 - 10), top: res.windowHeight - 80, width: 50, height: 50 },
-                clickable: true
-              },
-              {
-                id: "chooseTime_10",
-                iconPath: "/icon/min_choose_10.png",
-                position: { left: (res.windowWidth - 50 - 10), top: res.windowHeight - 80-51, width: 50, height: 50 },
-                clickable: true
-              },
-              {
-                id: "chooseTime_5",
-                iconPath: "/icon/min_choose_5.png",
-                position: { left: (res.windowWidth - 50 - 10), top: res.windowHeight - 80 - 51-51, width: 50, height: 50 },
-                clickable: true
-              },
-              {
-                id: "chooseTime_all",
-                iconPath: "/icon/min_choose_all_on.png",
-                position: { left: (res.windowWidth - 50 - 10), top: res.windowHeight - 80 - 51 - 51-51, width: 50, height: 50 },
-                clickable: true
-              }
-            ]
+            includePoints:[{latitude:latitude,longitude:longitude},{latitude:res.data.order.latitude,longitude:res.data.order.longitude}],
+            markers: [{ latitude: res.data.order.latitude, longitude: res.data.order.longitude, iconPath:'/icon/min29.png',width:50,height:60}]
           })
-        }else if(that.data.countDown==5){
-          that.setData({
-            controls: [
-              {
-                id: "currentLocation",
-                iconPath: "/icon/location.png",
-                position: { left: 10, top: res.windowHeight - 80, width: 50, height: 50 },
-                clickable: true
-              },
-              {
-                id: "chooseTime_15",
-                iconPath: "/icon/min_choose_15.png",
-                position: { left: (res.windowWidth - 50 - 10), top: res.windowHeight - 80, width: 50, height: 50 },
-                clickable: true
-              },
-              {
-                id: "chooseTime_10",
-                iconPath: "/icon/min_choose_10.png",
-                position: { left: (res.windowWidth - 50 - 10), top: res.windowHeight - 80 - 51, width: 50, height: 50 },
-                clickable: true
-              },
-              {
-                id: "chooseTime_5",
-                iconPath: "/icon/min_choose_5_on.png",
-                position: { left: (res.windowWidth - 50 - 10), top: res.windowHeight - 80 - 51 - 51, width: 50, height: 50 },
-                clickable: true
-              },
-              {
-                id: "chooseTime_all",
-                iconPath: "/icon/min_choose_all.png",
-                position: { left: (res.windowWidth - 50 - 10), top: res.windowHeight - 80 - 51 - 51 - 51, width: 50, height: 50 },
-                clickable: true
-              }
-            ]
-          })
-        }else if(that.data.countDown==10){
-          that.setData({
-            controls: [
-              {
-                id: "currentLocation",
-                iconPath: "/icon/location.png",
-                position: { left: 10, top: res.windowHeight - 80, width: 50, height: 50 },
-                clickable: true
-              },
-              {
-                id: "chooseTime_15",
-                iconPath: "/icon/min_choose_15.png",
-                position: { left: (res.windowWidth - 50 - 10), top: res.windowHeight - 80, width: 50, height: 50 },
-                clickable: true
-              },
-              {
-                id: "chooseTime_10",
-                iconPath: "/icon/min_choose_10_on.png",
-                position: { left: (res.windowWidth - 50 - 10), top: res.windowHeight - 80 - 51, width: 50, height: 50 },
-                clickable: true
-              },
-              {
-                id: "chooseTime_5",
-                iconPath: "/icon/min_choose_5.png",
-                position: { left: (res.windowWidth - 50 - 10), top: res.windowHeight - 80 - 51 - 51, width: 50, height: 50 },
-                clickable: true
-              },
-              {
-                id: "chooseTime_all",
-                iconPath: "/icon/min_choose_all.png",
-                position: { left: (res.windowWidth - 50 - 10), top: res.windowHeight - 80 - 51 - 51 - 51, width: 50, height: 50 },
-                clickable: true
-              }
-            ]
-          })
-        }else if(that.data.countDown==15){
-          that.setData({
-            controls: [
-              {
-                id: "currentLocation",
-                iconPath: "/icon/location.png",
-                position: { left: 10, top: res.windowHeight - 80, width: 50, height: 50 },
-                clickable: true
-              },
-              {
-                id: "chooseTime_15",
-                iconPath: "/icon/min_choose_15_on.png",
-                position: { left: (res.windowWidth - 50 - 10), top: res.windowHeight - 80, width: 50, height: 50 },
-                clickable: true
-              },
-              {
-                id: "chooseTime_10",
-                iconPath: "/icon/min_choose_10.png",
-                position: { left: (res.windowWidth - 50 - 10), top: res.windowHeight - 80 - 51, width: 50, height: 50 },
-                clickable: true
-              },
-              {
-                id: "chooseTime_5",
-                iconPath: "/icon/min_choose_5.png",
-                position: { left: (res.windowWidth - 50 - 10), top: res.windowHeight - 80 - 51 - 51, width: 50, height: 50 },
-                clickable: true
-              },
-              {
-                id: "chooseTime_all",
-                iconPath: "/icon/min_choose_all.png",
-                position: { left: (res.windowWidth - 50 - 10), top: res.windowHeight - 80 - 51 - 51 - 51, width: 50, height: 50 },
-                clickable: true
-              }
-            ]
+        } else {
+          wx.showToast({
+            title: '出错了',
+            icon: 'loading',
+            duration: 1000
           })
         }
-      }
-    })
-  },
-  //显示已预约状态时,地图界面显示的按钮
-  showOrder:function(){
-    var that = this
-    wx.getSystemInfo({
-      success: function (res) {
-        that.setData({
-          controls: [
-            {
-              id: "currentLocation",
-              iconPath: "/icon/location.png",
-              position: { left: 10, top: res.windowHeight - 80, width: 50, height: 50 },
-              clickable: true
-            },
-            {
-              id: "orderDetail",
-              iconPath: "/icon/reservationBtn.png",
-              position: { left: (res.windowWidth - 150) / 2, top: res.windowHeight - 80, width: 150, height: 50 },
-              clickable: true
-            }
-          ]
+      },
+      fail: function () {
+        wx.hideLoading()
+        wx.showToast({
+          title: '请求失败',
+          icon: 'loading',
+          duration: 1000
         })
       }
     })
+  },
+
+  //显示待预约状态时,地图界面显示的按钮
+  showPending:function(){
+    var that = this
+    if (that.data.countDown==60){
+      that.setData({
+        controls: [
+          {
+            id: "currentLocation",
+            iconPath: "/icon/location.png",
+            position: { left: 10, top: that.data.windowHeight - 80, width: 50, height: 50 },
+            clickable: true
+          },
+          {
+            id: "chooseTime_15",
+            iconPath: "/icon/min_choose_15.png",
+            position: { left: (that.data.windowWidth - 50 - 10), top: that.data.windowHeight - 80, width: 50, height: 50 },
+            clickable: true
+          },
+          {
+            id: "chooseTime_10",
+            iconPath: "/icon/min_choose_10.png",
+            position: { left: (that.data.windowWidth - 50 - 10), top: that.data.windowHeight - 80-51, width: 50, height: 50 },
+            clickable: true
+          },
+          {
+            id: "chooseTime_5",
+            iconPath: "/icon/min_choose_5.png",
+            position: { left: (that.data.windowWidth - 50 - 10), top: that.data.windowHeight - 80 - 51-51, width: 50, height: 50 },
+            clickable: true
+          },
+          {
+            id: "chooseTime_all",
+            iconPath: "/icon/min_choose_all_on.png",
+            position: { left: (that.data.windowWidth - 50 - 10), top: that.data.windowHeight - 80 - 51 - 51-51, width: 50, height: 50 },
+            clickable: true
+          }
+        ]
+      })
+    }else if(that.data.countDown==5){
+      that.setData({
+        controls: [
+          {
+            id: "currentLocation",
+            iconPath: "/icon/location.png",
+            position: { left: 10, top: that.data.windowHeight - 80, width: 50, height: 50 },
+            clickable: true
+          },
+          {
+            id: "chooseTime_15",
+            iconPath: "/icon/min_choose_15.png",
+            position: { left: (that.data.windowWidth - 50 - 10), top: that.data.windowHeight - 80, width: 50, height: 50 },
+            clickable: true
+          },
+          {
+            id: "chooseTime_10",
+            iconPath: "/icon/min_choose_10.png",
+            position: { left: (that.data.windowWidth - 50 - 10), top: that.data.windowHeight - 80 - 51, width: 50, height: 50 },
+            clickable: true
+          },
+          {
+            id: "chooseTime_5",
+            iconPath: "/icon/min_choose_5_on.png",
+            position: { left: (that.data.windowWidth - 50 - 10), top: that.data.windowHeight - 80 - 51 - 51, width: 50, height: 50 },
+            clickable: true
+          },
+          {
+            id: "chooseTime_all",
+            iconPath: "/icon/min_choose_all.png",
+            position: { left: (that.data.windowWidth - 50 - 10), top: that.data.windowHeight - 80 - 51 - 51 - 51, width: 50, height: 50 },
+            clickable: true
+          }
+        ]
+      })
+    }else if(that.data.countDown==10){
+      that.setData({
+        controls: [
+          {
+            id: "currentLocation",
+            iconPath: "/icon/location.png",
+            position: { left: 10, top: that.data.windowHeight - 80, width: 50, height: 50 },
+            clickable: true
+          },
+          {
+            id: "chooseTime_15",
+            iconPath: "/icon/min_choose_15.png",
+            position: { left: (that.data.windowWidth - 50 - 10), top: that.data.windowHeight - 80, width: 50, height: 50 },
+            clickable: true
+          },
+          {
+            id: "chooseTime_10",
+            iconPath: "/icon/min_choose_10_on.png",
+            position: { left: (that.data.windowWidth - 50 - 10), top: that.data.windowHeight - 80 - 51, width: 50, height: 50 },
+            clickable: true
+          },
+          {
+            id: "chooseTime_5",
+            iconPath: "/icon/min_choose_5.png",
+            position: { left: (that.data.windowWidth - 50 - 10), top: that.data.windowHeight - 80 - 51 - 51, width: 50, height: 50 },
+            clickable: true
+          },
+          {
+            id: "chooseTime_all",
+            iconPath: "/icon/min_choose_all.png",
+            position: { left: (that.data.windowWidth - 50 - 10), top: that.data.windowHeight - 80 - 51 - 51 - 51, width: 50, height: 50 },
+            clickable: true
+          }
+        ]
+      })
+    }else if(that.data.countDown==15){
+      that.setData({
+        controls: [
+          {
+            id: "currentLocation",
+            iconPath: "/icon/location.png",
+            position: { left: 10, top: that.data.windowHeight - 80, width: 50, height: 50 },
+            clickable: true
+          },
+          {
+            id: "chooseTime_15",
+            iconPath: "/icon/min_choose_15_on.png",
+            position: { left: (that.data.windowWidth - 50 - 10), top: that.data.windowHeight - 80, width: 50, height: 50 },
+            clickable: true
+          },
+          {
+            id: "chooseTime_10",
+            iconPath: "/icon/min_choose_10.png",
+            position: { left: (that.data.windowWidth - 50 - 10), top: that.data.windowHeight - 80 - 51, width: 50, height: 50 },
+            clickable: true
+          },
+          {
+            id: "chooseTime_5",
+            iconPath: "/icon/min_choose_5.png",
+            position: { left: (that.data.windowWidth - 50 - 10), top: that.data.windowHeight - 80 - 51 - 51, width: 50, height: 50 },
+            clickable: true
+          },
+          {
+            id: "chooseTime_all",
+            iconPath: "/icon/min_choose_all.png",
+            position: { left: (that.data.windowWidth - 50 - 10), top: that.data.windowHeight - 80 - 51 - 51 - 51, width: 50, height: 50 },
+            clickable: true
+          }
+        ]
+      })
+    }
+  },
+  //显示已预约状态时,地图界面显示的按钮
+  showOrder:function(){
+    this.setData({
+      controls: [
+        {
+          id: "currentLocation",
+          iconPath: "/icon/location.png",
+          position: { left: 10, top: this.data.windowHeight - 80, width: 50, height: 50 },
+          clickable: true
+        },
+        {
+          id: "orderDetail",
+          iconPath: "/icon/reservationBtn.png",
+          position: { left: (this.data.windowWidth - 150) / 2, top: this.data.windowHeight - 80, width: 150, height: 50 },
+          clickable: true
+        }
+      ]
+    })
+    
   }
 })
