@@ -140,6 +140,7 @@ Page({
           that.getUserLocation()
         } else if (res.data.status == 3) { //该用户当前没有预约的订单
           that.setData({
+            includePoints:[],
             userStatus:3
           })
           //显示待预约的地图按钮
@@ -313,9 +314,11 @@ Page({
           })
         }else{ //有地图授权
           that.getLocation()
-          that.setData({
-            locationTimes: 1
-          })
+          if (that.data.userStatus == 3) {
+            that.setData({
+              locationTimes: 1
+            })
+          }
         }
       }
     })
@@ -333,6 +336,10 @@ Page({
           that.mapContext.moveToLocation()
           that.getShareOrder()
         }else if(that.data.userStatus==2){
+          that.setData({
+            latitude: res.latitude,
+            longitude: res.longitude,
+          })
           that.getUserOrderMark(res.latitude,res.longitude)
         }
       },
@@ -357,7 +364,7 @@ Page({
           console.log(res.data.order)
           that.setData({
             includePoints:[{latitude:latitude,longitude:longitude},{latitude:res.data.order.latitude,longitude:res.data.order.longitude}],
-            markers: [{ latitude: res.data.order.latitude, longitude: res.data.order.longitude, iconPath:'/icon/min29.png',width:50,height:60}]
+            markers: [{ latitude: res.data.order.latitude, longitude: res.data.order.longitude, iconPath:'/icon/parking.png',width:60,height:60}]
           })
         } else {
           wx.showToast({

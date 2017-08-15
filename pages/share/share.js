@@ -19,6 +19,7 @@ Page({
     minButton4: { plain: true, color: "#000000", bgColor: "#ffffff" },
     selectedMin:15,
     inputMin:"",
+    inputValue:"",
     chooseMapText:"点击此处标记您车位的位置",
     shareName:"",
     shareAddress:"",
@@ -105,7 +106,8 @@ Page({
           that.getUserLocation()
         } else if(res.data.status==4){    //该用户当前没有共享的订单
           that.setData({
-            shareStatus:4
+            shareStatus:4,
+            includePoints: [],            
           })
         }else {
           wx.showToast({
@@ -169,10 +171,10 @@ Page({
     wx.getLocation({
       type: 'gcj02',
       success: function (res) {
-        // that.setData({
-        //   latitude: res.latitude,
-        //   longitude: res.longitude
-        // })
+        that.setData({
+          latitude: res.latitude,
+          longitude: res.longitude
+        })
         // that.mapContext.moveToLocation()
         that.getUserOrderMark(res.latitude, res.longitude)
       },
@@ -295,35 +297,43 @@ Page({
   },
   chooseMin:function(e){
     var min=e.currentTarget.dataset.min
+    this.minStatusUpdate(min)
+  },
+
+  minStatusUpdate:function(min){
     var selectedStatus = { plain: false, color: "#ffffff", bgColor: "#f4c600" }
     var unSelecctedStatus = { plain: true, color: "#000000", bgColor: "#ffffff" }
-    if(min==15){
+    if (min == 15) {
       this.setData({
-        selectedMin:15,
-        minButton1:selectedStatus,
-        minButton2:unSelecctedStatus,
-        minButton3:unSelecctedStatus,
-        minButton4:unSelecctedStatus
+        inputValue: '',
+        selectedMin: 15,
+        minButton1: selectedStatus,
+        minButton2: unSelecctedStatus,
+        minButton3: unSelecctedStatus,
+        minButton4: unSelecctedStatus
       })
-    }else if(min==30){
+    } else if (min == 30) {
       this.setData({
-        selectedMin:30,
+        inputValue:'',
+        selectedMin: 30,
         minButton1: unSelecctedStatus,
         minButton2: selectedStatus,
         minButton3: unSelecctedStatus,
         minButton4: unSelecctedStatus
       })
-    }else if(min==45){
+    } else if (min == 45) {
       this.setData({
-        selectedMin:45,
+        inputValue: '',
+        selectedMin: 45,
         minButton1: unSelecctedStatus,
         minButton2: unSelecctedStatus,
         minButton3: selectedStatus,
         minButton4: unSelecctedStatus
       })
-    }else if(min==60){
+    } else if (min == 60) {
       this.setData({
-        selectedMin:60,
+        inputValue: '',
+        selectedMin: 60,
         minButton1: unSelecctedStatus,
         minButton2: unSelecctedStatus,
         minButton3: unSelecctedStatus,
@@ -331,16 +341,24 @@ Page({
       })
     }
   },
+
   inputMin:function(e){
     var min=e.detail.value
+    var selectedStatus = { plain: false, color: "#ffffff", bgColor: "#f4c600" }
+    var unSelecctedStatus = { plain: true, color: "#000000", bgColor: "#ffffff" }
     if(min.length>0){ 
         this.setData({
-          inputMin:min
+          inputMin:min,
+          minButton1: unSelecctedStatus,
+          minButton2: unSelecctedStatus,
+          minButton3: unSelecctedStatus,
+          minButton4: unSelecctedStatus
         }) 
     }else{
       this.setData({
-        inputMin:""
+        inputMin:"",
       })
+      this.minStatusUpdate(this.data.selectedMin)
     }
   },
   chooseCarLocation:function(){
@@ -399,7 +417,7 @@ Page({
     var mapText = this.data.chooseMapText
     if (mapText == '点击此处标记您车位的位置') {
       wx.showToast({
-        title: '请标记车位的位置',
+        title: '请标记位置',
         icon: 'loading',
         duration: 1000
       })

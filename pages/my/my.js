@@ -61,5 +61,11 @@ Page({
     wx.navigateTo({
       url: '/pages/webView/webView?contentType=2',
     })
+  },
+
+  getMyBalance:function(){
+    wx.navigateTo({
+      url: '/pages/balance/balance',
+    })
   }
 })

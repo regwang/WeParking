@@ -13,7 +13,8 @@
     "pages/carLocation/carLocation",
     "pages/webView/webView",
     "pages/bookInfoModal/bookInfoModal",
-    "pages/shareInfoModal/shareInfoModal"
+    "pages/shareInfoModal/shareInfoModal",
+    "pages/balance/balance"
   ],
   "tabBar": {
     "list": [
