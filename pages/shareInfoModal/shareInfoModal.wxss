@@ -58,7 +58,7 @@ Page{
   font-weight: bold;
 }
 .book{
-   margin-top: 30rpx; 
+  margin-top: 30rpx; 
   padding: 0 20rpx;
 }
 .control_area{
@@ -68,7 +68,7 @@ Page{
   align-items: center;
   justify-content: space-around;
   font-size: 30rpx;
-  /* padding: 0 30rpx 0 30rpx; */
+  margin-top: 30rpx;
 }
 .control_button{
   width: 300rpx;

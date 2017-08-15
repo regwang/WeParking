@@ -3,7 +3,7 @@
 var app = getApp()
 Page({
   data: {
-    shareStatus:3,
+    shareStatus:0,
     windowHeight: 0,
     windowWidth: 0,
     controls: [],
@@ -30,6 +30,10 @@ Page({
     if (wx.canIUse('getSystemInfoSync.return.SDKVersion')) {
       //获得微信版本信息,检测兼容性
       var res = wx.getSystemInfoSync()
+      this.setData({
+        windowWidth:res.windowWidth,
+        windowHeight:res.windowHeight
+      })
       var sdk = parseInt(res.SDKVersion.replace(/\./g, ''))
       if (sdk < 125) {
         wx.showModal({
@@ -192,7 +196,7 @@ Page({
           console.log(res.data.order)
           that.setData({
             includePoints: [{ latitude: latitude, longitude: longitude }, { latitude: res.data.order.latitude, longitude: res.data.order.longitude }],
-            markers: [{ latitude: res.data.order.latitude, longitude: res.data.order.longitude, iconPath: '/icon/parking.png', width: 50, height: 50 }]
+            markers: [{ latitude: res.data.order.latitude, longitude: res.data.order.longitude, iconPath: '/icon/parking.png', width: 60, height: 60 }]
           })
         } else {
           wx.showToast({
@@ -219,39 +223,23 @@ Page({
     var res = wx.getSystemInfoSync()
     this.setData({
       windowHeight: res.windowHeight,
-      windowWidth: res.windowWidth
-    })
-    that.setData({
+      windowWidth: res.windowWidth,
       controls: [
         {
           id: "currentLocation",
           iconPath: "/icon/location.png",
-          position: { left: 10, top: that.data.windowHeight - 80, width: 50, height: 50 },
+          position: { left: 10, top: res.windowHeight - 80, width: 50, height: 50 },
           clickable: true
         },
         {
           id: "orderDetail",
           iconPath: "/icon/sharedBtn.png",
-          position: { left: (that.data.windowWidth - 150) / 2, top: that.data.windowHeight - 80, width: 150, height: 50 },
+          position: { left: (res.windowWidth - 150) / 2, top: res.windowHeight - 80, width: 150, height: 50 },
           clickable: true
         }
       ]
     })
    
-  },
-  //未共享状态,车位发布时，地图界面显示的按钮
-  showShareBtn:function(){
-    var that = this
-    that.setData({
-      controls: [
-        {
-          id: "currentLocation",
-          iconPath: "/icon/location.png",
-          position: { left: 10, top: showShareBtn.windowHeight-480, width: 50, height: 50 },
-          clickable: true
-        }
-      ]
-    })
   },
   getCarNumber: function (e) {
     this.setData({

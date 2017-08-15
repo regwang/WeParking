@@ -219,6 +219,13 @@ Page({
     })
   },
 
+  //关闭本页面
+  close_page: function () {
+    wx.switchTab({
+      url: '/pages/share/share',
+    })
+  },
+
   //更新状态和显示数据
   updateDataAndText: function (order) {
     //待预约

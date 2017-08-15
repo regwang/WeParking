@@ -55,6 +55,7 @@
     <block wx:if="{{orderInfo.status==0}}">   
     <view class="book">
       <button bindtap="cancleShare" type="primary" style="background-color:#f4c600;border-radius: 50rpx;">取消共享</button>
+      <view style="height:30rpx;"></view> 
     </view>
     </block> 
     <block wx:if="{{orderInfo.status==3}}">   
