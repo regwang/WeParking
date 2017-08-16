@@ -26,7 +26,6 @@ Page({
   
   //获得余额数据
   getBalanceInfo:function(){
-    console.log(this.data.pageIndex)
     var that=this
     wx.request({
       url: app.globalData.serverUrl + 'getMoneyInfo.als',
@@ -36,8 +35,9 @@ Page({
         if(res.data.status==0){
           //有数据
           if(res.data.moneyDetail.length>0){
-            if(orders.length==0){
+            if(that.data.orders.length==0){
               that.setData({
+                balance: res.data.money,
                 orders:res.data.moneyDetail,
                 show_more_hidden:true
               })
@@ -45,6 +45,7 @@ Page({
               var orderList=[]
               orderList=that.data.orders.concat(res.data.moneyDetail)
               that.setData({
+                balance: res.data.money,
                 orders:orderList,
                 show_more_hidden:true
               })
@@ -65,11 +66,6 @@ Page({
                 load_more_text:'没有数据了..'
               })
           }
-          that.setData({
-            balance:res.data.money,
-            orders:res.data.moneyDetail,
-            hasMore:res.data.moneyDetail.length==0 ? false :true
-          })
         }else{
           wx.showToast({
             title: '出错了',

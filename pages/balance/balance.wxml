@@ -10,7 +10,7 @@
 <view class="balance_detail_hint hint_text">
   <text>收支记录</text>
 </view>
-<view wx:for="{{orders}}">
+<view wx:for="{{orders}}" wx:key="createTime">
   <view class="order_area">
     <view class="line"></view>
     <view class="order_content_area">
@@ -19,14 +19,14 @@
         <text class="hint_text hint_text_size">{{item.createTime}}</text>
       </view>
       <view class="money_area">
-          <text class="money_control">{{item.moneyControl==0 ? '+' : '-'}}</text>
-          <text class="money_number">{{item.moneyNumber}}</text>
+          <text class="{{item.moneyControl==0 ? 'money_control' : 'money_control2'}}">{{item.moneyControl==0 ? '+' : '-'}}</text>
+          <text class="{{item.moneyControl==0 ? 'money_number' : 'money_number2'}}">{{item.moneyNumber}}</text>
       </view>
     </view>
   </view>
 </view>
-<view class="balance_detail_hint hint_text" hidden="{{show_more_hidden}}">{{load_more_text}}</view>
+<view class="load_hint hint_text" hidden="{{show_more_hidden}}">{{load_more_text}}</view>
 
 <view class="no_data_area" hidden="{{no_data_hidden}}">
-  <view class="balance_detail_hint hint_text">暂无数据</view>
+  <view class="load_hint hint_text">暂无数据</view>
 </view>

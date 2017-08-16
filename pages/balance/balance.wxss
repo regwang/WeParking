@@ -88,3 +88,12 @@ Page{
   color: #262932;
   margin-left: 30rpx;
 }
+
+.load_hint{
+  font-size: 28rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 120rpx;
+  width: 100%;
+}
