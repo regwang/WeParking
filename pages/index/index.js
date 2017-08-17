@@ -364,7 +364,7 @@ Page({
           console.log(res.data.order)
           that.setData({
             includePoints:[{latitude:latitude,longitude:longitude},{latitude:res.data.order.latitude,longitude:res.data.order.longitude}],
-            markers: [{ latitude: res.data.order.latitude, longitude: res.data.order.longitude, iconPath:'/icon/parking.png',width:50,height:50}]
+            markers: [{ latitude: res.data.order.latitude, longitude: res.data.order.longitude, iconPath:'/icon/parking.png',width:45,height:58}]
           })
         } else {
           wx.showToast({

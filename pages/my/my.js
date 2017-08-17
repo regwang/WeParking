@@ -57,6 +57,12 @@ Page({
     
   },
 
+  getMyOrder:function(){
+    wx.navigateTo({
+      url: '/pages/myOrder/myOrder',
+    })
+  },
+
   getAbountUS:function(){
     wx.navigateTo({
       url: '/pages/webView/webView?contentType=2',

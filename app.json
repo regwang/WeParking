@@ -14,7 +14,8 @@
     "pages/webView/webView",
     "pages/bookInfoModal/bookInfoModal",
     "pages/shareInfoModal/shareInfoModal",
-    "pages/balance/balance"
+    "pages/balance/balance",
+    "pages/myOrder/myOrder"
   ],
   "tabBar": {
     "list": [

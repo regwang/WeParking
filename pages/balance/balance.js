@@ -97,5 +97,5 @@ Page({
       })
       this.getBalanceInfo()
     }
-  },
+  }
 })
