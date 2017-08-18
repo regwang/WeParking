@@ -73,5 +73,10 @@ Page({
     wx.navigateTo({
       url: '/pages/balance/balance',
     })
+  },
+  getServiceInfo:function(){
+    wx.navigateTo({
+      url: '/pages/serviceInfo/serviceInfo',
+    })
   }
 })

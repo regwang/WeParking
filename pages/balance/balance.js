@@ -54,6 +54,7 @@ Page({
           //第一次就没数据
           else if(that.data.pageIndex==1 && res.data.moneyDetail.length==0){
             that.setData({
+              balance:res.data.money,
               hasMore:false,
               no_data_hidden:false
             })
@@ -97,5 +98,60 @@ Page({
       })
       this.getBalanceInfo()
     }
+  },
+  pullMoney:function(){
+    if(this.data.balance==0){
+      wx.showModal({
+        title: '提示',
+        content: '您目前没有余额,无需提现',
+        showCancel:false,
+        confirmColor:'#f4c600'
+      })
+    }else{
+      wx.showLoading({
+        title: '请稍候..',
+      })
+      var that=this
+      wx.request({
+        url: app.globalData.serverUrl +'applyWithdraw.als',
+        data:{token:wx.getStorageSync('token')},
+        success:function(res){
+          wx.hideLoading()
+          if(res.data.status==0){
+            wx.showModal({
+              title: '提示',
+              content: '提现申请成功,请耐心等待后台打款.',
+              showCancel: false,
+              confirmColor: '#f4c600'
+            })
+            that.setData({
+              balance:'0.00'
+            })
+          }
+          //用户未绑定账号信息
+          else if(res.data.status==-2){
+            wx.navigateTo({
+              url: '/pages/bindAccount/bindAccount',
+            })
+          }else{
+            wx.showToast({
+              title: '出错了',
+              icon:'loading',
+              duration:1000
+            })
+          }
+        },
+        fail:function(){
+          wx.hideLoading()
+          wx.showModal({
+            title: '提示',
+            content: '网络不太顺畅,请稍后再试',
+            showCancel: false,
+            confirmColor: '#f4c600'
+          })
+        }
+      })
+    }
+
   }
 })

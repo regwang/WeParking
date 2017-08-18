@@ -24,7 +24,7 @@
     </view>
     <view class="line2"></view>
   </view>
-  <view class="one_line_area">
+  <view bindtap="getServiceInfo" class="one_line_area">
     <view class="one_line">
       <view class="title_area title_margin">
         <image src="/icon/service.png" style="width:40rpx;height:40rpx;"></image>

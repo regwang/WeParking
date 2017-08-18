@@ -15,7 +15,9 @@
     "pages/bookInfoModal/bookInfoModal",
     "pages/shareInfoModal/shareInfoModal",
     "pages/balance/balance",
-    "pages/myOrder/myOrder"
+    "pages/myOrder/myOrder",
+    "pages/bindAccount/bindAccount",
+    "pages/serviceInfo/serviceInfo"
   ],
   "tabBar": {
     "list": [

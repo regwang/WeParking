@@ -6,6 +6,9 @@
   <view class="balance_num">
     <text>{{balance}}</text>
   </view>
+  <view class="pull_area">
+     <button bindtap="pullMoney" style="color:#f4c600">提现</button> 
+  </view>
 </view>
 <view class="balance_detail_hint hint_text">
   <text>收支记录</text>
@@ -15,7 +18,9 @@
     <view class="line"></view>
     <view class="order_content_area">
       <view class="source_area">
-        <text class="main_text main_text_size">{{item.moneySource==0 ? '共享车位' : '提现'}}</text>
+        <text wx:if="{{item.moneySource==0}}" class="main_text main_text_size">共享车位</text>
+        <text wx:if="{{item.moneySource==1}}" class="main_text main_text_size">提现</text>
+        <text wx:if="{{item.moneySource==2}}" class="main_text main_text_size">预约车位</text>
         <text class="hint_text hint_text_size">{{item.createTime}}</text>
       </view>
       <view class="money_area">
