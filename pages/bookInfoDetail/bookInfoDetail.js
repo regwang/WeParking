@@ -88,6 +88,120 @@ Page({
 
   },
 
+  //检查支付
+  checkPay: function () {
+    var that = this
+    wx.showLoading({
+      title: '操作中..',
+    })
+    //获得用户余额
+    wx.request({
+      url: app.globalData.serverUrl + 'getUserMoney.als',
+      data: { token: wx.getStorageSync('token') },
+      success: function (res) {
+        wx.hideLoading()
+        if (res.data.status == 0) {
+          //用户的余额足以支付本次的订单金额
+          if (res.data.money >= that.data.orderInfo.money) {
+            //弹窗让用户选择支付方式
+            wx.showActionSheet({
+              itemList: ['微信支付', '余额支付'],
+              itemColor: '#f4c600',
+              success: function (res) {
+                //用户选择微信支付
+                if (res.tapIndex == 0) {
+                  that.wechatPay()
+                }
+                //用户选择余额支付
+                else if (res.tapIndex == 1) {
+                  wx.showModal({
+                    title: '提示',
+                    content: '确定支付吗？',
+                    confirmColor: '#f4c600',
+                    success: function (res) {
+                      if (res.confirm) {
+                        wx.showLoading({
+                          title: '操作中..',
+                        })
+                        wx.request({
+                          url: app.globalData.serverUrl + 'payWithBalance.als',
+                          data: { id: that.data.orderInfo.id, token: wx.getStorageSync('token') },
+                          success: function (res) {
+                            wx.hideLoading()
+                            if (res.data.status == 0) {
+                              wx.showModal({
+                                title: '提示',
+                                content: '感谢使用,本次订单已完结',
+                                confirmColor: '#f4c600',
+                                showCancel: false,
+                                success: function (res) {
+                                  if (res.confirm) {
+                                    wx.navigateBack({
+                                      delta: 1
+                                    })
+                                  }
+                                }
+                              })
+                            } else {
+                              wx.showToast({
+                                title: '出错了',
+                                icon: 'loading',
+                                duration: 1000
+                              })
+                            }
+                          },
+                          fail: function () {
+                            wx.hideLoading()
+                            wx.showModal({
+                              title: '提示',
+                              content: '网络有点问题,请稍后再试',
+                              showCancel: false,
+                              confirmColor: '#f4c600',
+                              success: function (res) {
+                                if (res.confirm) {
+
+                                }
+                              }
+                            })
+                          }
+                        })
+                      }
+                    }
+                  })
+                }
+              }
+            })
+          }
+          //用户的余额不足以支付本次的订单金额,直接微信支付
+          else {
+            that.wechatPay()
+          }
+        } else {
+          wx.showToast({
+            title: '出错了',
+            icon: 'loading',
+            duration: 1000
+          })
+        }
+      },
+      fail: function () {
+        wx.hideLoading()
+        wx.showModal({
+          title: '提示',
+          content: '网络有点问题,请稍后再试',
+          showCancel: false,
+          confirmColor: '#f4c600',
+          success: function (res) {
+            if (res.confirm) {
+
+            }
+          }
+        })
+      }
+    })
+  },
+
+
   //微信支付
   wechatPay: function () {
     var that = this
@@ -192,6 +306,13 @@ Page({
     var that = this
     wx.navigateTo({
       url: '/pages/reportOrder/reportOrder?status=6&reportUser=2&id=' + that.data.orderInfo.id,
+    })
+  },
+  //查看车位地点
+  view_location:function(){
+    var that=this
+    wx.navigateTo({
+      url: '/pages/location/location?orderInfo='+that.data.orderInfo,
     })
   },
 

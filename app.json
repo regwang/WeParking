@@ -17,7 +17,8 @@
     "pages/balance/balance",
     "pages/myOrder/myOrder",
     "pages/bindAccount/bindAccount",
-    "pages/serviceInfo/serviceInfo"
+    "pages/serviceInfo/serviceInfo",
+    "pages/location/location"
   ],
   "tabBar": {
     "list": [

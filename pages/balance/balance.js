@@ -125,8 +125,15 @@ Page({
               confirmColor: '#f4c600'
             })
             that.setData({
-              balance:'0.00'
+              pageIndex: 1,
+              orders: [],
+              balance: '0.00',
+              hasMore: true,
+              load_more_text: '加载中..',
+              show_more_hidden: true,
+              no_data_hidden: true
             })
+            that.getBalanceInfo()
           }
           //用户未绑定账号信息
           else if(res.data.status==-2){

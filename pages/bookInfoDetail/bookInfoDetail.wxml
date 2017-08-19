@@ -64,7 +64,7 @@
       <view class="line"></view>
     </view>
   </block>
-  <view class="one_info">
+  <view bindtap="view_location" class="one_info">
     <view class="one_info_view">
       <text class="subject_text">车位地点</text>
       <text class="light_text">查看</text>
@@ -80,7 +80,7 @@
 </view>
 <block wx:if="{{orderInfo.status==4}}">
   <view class="book">
-    <button bindtap="wechatPay" type="primary" style="background-color:#f4c600;">微信支付</button>
+    <button bindtap="checkPay" type="primary" style="background-color:#f4c600;">支付</button>
   </view>
 </block>
  <block wx:if="{{orderInfo.status==3 || orderInfo.status==4}}"> 
