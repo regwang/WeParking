@@ -394,25 +394,25 @@ Page({
           {
             id: "currentLocation",
             iconPath: "/icon/location.png",
-            position: { left: 10, top: that.data.windowHeight - 80, width: 50, height: 50 },
+            position: { left: 10, top: that.data.windowHeight - 80, width: 45, height: 45 },
             clickable: true
           },
           {
             id: "chooseTime_15",
             iconPath: "/icon/min_choose_15.png",
-            position: { left: (that.data.windowWidth - 50 - 10), top: that.data.windowHeight - 80, width: 50, height: 50 },
+            position: { left: (that.data.windowWidth - 45 - 10), top: that.data.windowHeight - 80, width: 45, height: 45 },
             clickable: true
           },
           {
             id: "chooseTime_10",
             iconPath: "/icon/min_choose_10.png",
-            position: { left: (that.data.windowWidth - 50 - 10), top: that.data.windowHeight - 80-51, width: 50, height: 50 },
+            position: { left: (that.data.windowWidth - 45 - 10), top: that.data.windowHeight - 80-47, width: 45, height: 45 },
             clickable: true
           },
           {
             id: "chooseTime_5",
             iconPath: "/icon/min_choose_5.png",
-            position: { left: (that.data.windowWidth - 50 - 10), top: that.data.windowHeight - 80 - 51-51, width: 50, height: 50 },
+            position: { left: (that.data.windowWidth - 45 - 10), top: that.data.windowHeight - 80 - 47-47, width: 45, height: 45 },
             clickable: true
           }
           // ,
@@ -436,7 +436,7 @@ Page({
           {
             id: "chooseTime_15",
             iconPath: "/icon/min_choose_15.png",
-            position: { left: (that.data.windowWidth - 45 - 10), top: that.data.windowHeight - 45, width: 45, height: 45 },
+            position: { left: (that.data.windowWidth - 45 - 10), top: that.data.windowHeight - 80, width: 45, height: 45 },
             clickable: true
           },
           {
