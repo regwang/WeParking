@@ -29,10 +29,7 @@ Page({
         data: { id: options.orderId },
         success: function (res) {
           wx.hideLoading()
-          console.log(res.data)
           if (res.data.status == 0) {
-            console.log('订单信息')
-            console.log(res.data.order)
             that.updateDataAndText(res.data.order)
 
           } else {
@@ -63,8 +60,6 @@ Page({
           wx.hideLoading()
           console.log(res.data)
           if (res.data.status == 0) {
-            console.log('订单信息')
-            console.log(res.data.order)
             that.updateDataAndText(res.data.order)
 
           } else {
@@ -234,6 +229,14 @@ Page({
     var that = this
     wx.navigateTo({
       url: '/pages/reportOrder/reportOrder?status=6&reportUser=1&id=' + that.data.orderInfo.id,
+    })
+  },
+
+  //查看车位地点
+  view_location: function () {
+    var that = this
+    wx.navigateTo({
+      url: '/pages/location/location?orderId=' + that.data.orderInfo.id,
     })
   },
 

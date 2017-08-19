@@ -49,7 +49,6 @@ Page({
         }
         if (res.data.status == 0) {
           //有数据
-          console.log(res.data.orderDetail)
           if (res.data.orderDetail.length > 0) {
             if (that.data.shareOrders.length == 0) {
               that.setData({

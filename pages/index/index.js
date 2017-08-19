@@ -414,13 +414,14 @@ Page({
             iconPath: "/icon/min_choose_5.png",
             position: { left: (that.data.windowWidth - 50 - 10), top: that.data.windowHeight - 80 - 51-51, width: 50, height: 50 },
             clickable: true
-          },
-          {
-            id: "chooseTime_all",
-            iconPath: "/icon/min_choose_all_on.png",
-            position: { left: (that.data.windowWidth - 50 - 10), top: that.data.windowHeight - 80 - 51 - 51-51, width: 50, height: 50 },
-            clickable: true
           }
+          // ,
+          // {
+          //   id: "chooseTime_all",
+          //   iconPath: "/icon/min_choose_all_on.png",
+          //   position: { left: (that.data.windowWidth - 50 - 10), top: that.data.windowHeight - 80 - 51 - 51-51, width: 50, height: 50 },
+          //   clickable: true
+          // }
         ]
       })
     }else if(that.data.countDown==5){
@@ -429,33 +430,34 @@ Page({
           {
             id: "currentLocation",
             iconPath: "/icon/location.png",
-            position: { left: 10, top: that.data.windowHeight - 80, width: 50, height: 50 },
+            position: { left: 10, top: that.data.windowHeight - 80, width: 45, height: 45 },
             clickable: true
           },
           {
             id: "chooseTime_15",
             iconPath: "/icon/min_choose_15.png",
-            position: { left: (that.data.windowWidth - 50 - 10), top: that.data.windowHeight - 80, width: 50, height: 50 },
+            position: { left: (that.data.windowWidth - 45 - 10), top: that.data.windowHeight - 45, width: 45, height: 45 },
             clickable: true
           },
           {
             id: "chooseTime_10",
             iconPath: "/icon/min_choose_10.png",
-            position: { left: (that.data.windowWidth - 50 - 10), top: that.data.windowHeight - 80 - 51, width: 50, height: 50 },
+            position: { left: (that.data.windowWidth - 45 - 10), top: that.data.windowHeight - 80 - 47, width: 45, height: 45 },
             clickable: true
           },
           {
             id: "chooseTime_5",
             iconPath: "/icon/min_choose_5_on.png",
-            position: { left: (that.data.windowWidth - 50 - 10), top: that.data.windowHeight - 80 - 51 - 51, width: 50, height: 50 },
-            clickable: true
-          },
-          {
-            id: "chooseTime_all",
-            iconPath: "/icon/min_choose_all.png",
-            position: { left: (that.data.windowWidth - 50 - 10), top: that.data.windowHeight - 80 - 51 - 51 - 51, width: 50, height: 50 },
+            position: { left: (that.data.windowWidth - 45 - 10), top: that.data.windowHeight - 80 - 47 - 47, width: 45, height: 45 },
             clickable: true
           }
+          // ,
+          // {
+          //   id: "chooseTime_all",
+          //   iconPath: "/icon/min_choose_all.png",
+          //   position: { left: (that.data.windowWidth - 50 - 10), top: that.data.windowHeight - 80 - 51 - 51 - 51, width: 50, height: 50 },
+          //   clickable: true
+          // }
         ]
       })
     }else if(that.data.countDown==10){
@@ -464,33 +466,34 @@ Page({
           {
             id: "currentLocation",
             iconPath: "/icon/location.png",
-            position: { left: 10, top: that.data.windowHeight - 80, width: 50, height: 50 },
+            position: { left: 10, top: that.data.windowHeight - 80, width: 45, height: 45 },
             clickable: true
           },
           {
             id: "chooseTime_15",
             iconPath: "/icon/min_choose_15.png",
-            position: { left: (that.data.windowWidth - 50 - 10), top: that.data.windowHeight - 80, width: 50, height: 50 },
+            position: { left: (that.data.windowWidth - 45 - 10), top: that.data.windowHeight - 80, width: 45, height: 45 },
             clickable: true
           },
           {
             id: "chooseTime_10",
             iconPath: "/icon/min_choose_10_on.png",
-            position: { left: (that.data.windowWidth - 50 - 10), top: that.data.windowHeight - 80 - 51, width: 50, height: 50 },
+            position: { left: (that.data.windowWidth - 45 - 10), top: that.data.windowHeight - 80 - 47, width: 45, height: 45 },
             clickable: true
           },
           {
             id: "chooseTime_5",
             iconPath: "/icon/min_choose_5.png",
-            position: { left: (that.data.windowWidth - 50 - 10), top: that.data.windowHeight - 80 - 51 - 51, width: 50, height: 50 },
-            clickable: true
-          },
-          {
-            id: "chooseTime_all",
-            iconPath: "/icon/min_choose_all.png",
-            position: { left: (that.data.windowWidth - 50 - 10), top: that.data.windowHeight - 80 - 51 - 51 - 51, width: 50, height: 50 },
+            position: { left: (that.data.windowWidth - 45 - 10), top: that.data.windowHeight - 80 - 47 - 47, width: 45, height: 45 },
             clickable: true
           }
+          // ,
+          // {
+          //   id: "chooseTime_all",
+          //   iconPath: "/icon/min_choose_all.png",
+          //   position: { left: (that.data.windowWidth - 45 - 10), top: that.data.windowHeight - 80 - 47 - 47 - 47, width: 45, height: 45 },
+          //   clickable: true
+          // }
         ]
       })
     }else if(that.data.countDown==15){
@@ -499,33 +502,34 @@ Page({
           {
             id: "currentLocation",
             iconPath: "/icon/location.png",
-            position: { left: 10, top: that.data.windowHeight - 80, width: 50, height: 50 },
+            position: { left: 10, top: that.data.windowHeight - 80, width: 45, height: 45 },
             clickable: true
           },
           {
             id: "chooseTime_15",
             iconPath: "/icon/min_choose_15_on.png",
-            position: { left: (that.data.windowWidth - 50 - 10), top: that.data.windowHeight - 80, width: 50, height: 50 },
+            position: { left: (that.data.windowWidth - 45 - 10), top: that.data.windowHeight - 80, width: 45, height: 45 },
             clickable: true
           },
           {
             id: "chooseTime_10",
             iconPath: "/icon/min_choose_10.png",
-            position: { left: (that.data.windowWidth - 50 - 10), top: that.data.windowHeight - 80 - 51, width: 50, height: 50 },
+            position: { left: (that.data.windowWidth - 45 - 10), top: that.data.windowHeight - 80 - 47, width: 45, height: 45 },
             clickable: true
           },
           {
             id: "chooseTime_5",
             iconPath: "/icon/min_choose_5.png",
-            position: { left: (that.data.windowWidth - 50 - 10), top: that.data.windowHeight - 80 - 51 - 51, width: 50, height: 50 },
-            clickable: true
-          },
-          {
-            id: "chooseTime_all",
-            iconPath: "/icon/min_choose_all.png",
-            position: { left: (that.data.windowWidth - 50 - 10), top: that.data.windowHeight - 80 - 51 - 51 - 51, width: 50, height: 50 },
+            position: { left: (that.data.windowWidth - 45 - 10), top: that.data.windowHeight - 80 - 47 - 47, width: 45, height: 45 },
             clickable: true
           }
+          // ,
+          // {
+          //   id: "chooseTime_all",
+          //   iconPath: "/icon/min_choose_all.png",
+          //   position: { left: (that.data.windowWidth - 50 - 10), top: that.data.windowHeight - 80 - 51 - 51 - 51, width: 50, height: 50 },
+          //   clickable: true
+          // }
         ]
       })
     }
@@ -549,5 +553,12 @@ Page({
       ]
     })
     
+  },
+  onHide:function(){
+    this.setData({
+      countDown: 60
+    })
+    // this.showPending()
+    // this.getShareOrder()
   }
 })

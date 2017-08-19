@@ -108,56 +108,66 @@ Page({
         confirmColor:'#f4c600'
       })
     }else{
-      wx.showLoading({
-        title: '请稍候..',
-      })
-      var that=this
-      wx.request({
-        url: app.globalData.serverUrl +'applyWithdraw.als',
-        data:{token:wx.getStorageSync('token')},
+      wx.showModal({
+        title: '提示',
+        content: '确认提现吗',
+        confirmColor:'#f4c600',
         success:function(res){
-          wx.hideLoading()
-          if(res.data.status==0){
-            wx.showModal({
-              title: '提示',
-              content: '提现申请成功,请耐心等待后台打款.',
-              showCancel: false,
-              confirmColor: '#f4c600'
+          if(res.confirm){
+            wx.showLoading({
+              title: '请稍候..',
             })
-            that.setData({
-              pageIndex: 1,
-              orders: [],
-              balance: '0.00',
-              hasMore: true,
-              load_more_text: '加载中..',
-              show_more_hidden: true,
-              no_data_hidden: true
+            var that = this
+            wx.request({
+              url: app.globalData.serverUrl + 'applyWithdraw.als',
+              data: { token: wx.getStorageSync('token') },
+              success: function (res) {
+                wx.hideLoading()
+                if (res.data.status == 0) {
+                  wx.showModal({
+                    title: '提示',
+                    content: '提现申请成功,请耐心等待后台打款.',
+                    showCancel: false,
+                    confirmColor: '#f4c600'
+                  })
+                  that.setData({
+                    pageIndex: 1,
+                    orders: [],
+                    balance: '0.00',
+                    hasMore: true,
+                    load_more_text: '加载中..',
+                    show_more_hidden: true,
+                    no_data_hidden: true
+                  })
+                  that.getBalanceInfo()
+                }
+                //用户未绑定账号信息
+                else if (res.data.status == -2) {
+                  wx.navigateTo({
+                    url: '/pages/bindAccount/bindAccount',
+                  })
+                } else {
+                  wx.showToast({
+                    title: '出错了',
+                    icon: 'loading',
+                    duration: 1000
+                  })
+                }
+              },
+              fail: function () {
+                wx.hideLoading()
+                wx.showModal({
+                  title: '提示',
+                  content: '网络不太顺畅,请稍后再试',
+                  showCancel: false,
+                  confirmColor: '#f4c600'
+                })
+              }
             })
-            that.getBalanceInfo()
           }
-          //用户未绑定账号信息
-          else if(res.data.status==-2){
-            wx.navigateTo({
-              url: '/pages/bindAccount/bindAccount',
-            })
-          }else{
-            wx.showToast({
-              title: '出错了',
-              icon:'loading',
-              duration:1000
-            })
-          }
-        },
-        fail:function(){
-          wx.hideLoading()
-          wx.showModal({
-            title: '提示',
-            content: '网络不太顺畅,请稍后再试',
-            showCancel: false,
-            confirmColor: '#f4c600'
-          })
         }
       })
+     
     }
 
   }

@@ -74,7 +74,7 @@
     </view>
   </block>
   <block wx:if="{{orderInfo.status!=0}}">
-  <view class="one_info">
+  <view bindtap="view_location" class="one_info">
     <view class="one_info_view">
       <text class="subject_text">车位地点</text>
       <text class="light_text">查看</text>
