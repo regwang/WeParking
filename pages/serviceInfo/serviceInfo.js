@@ -46,4 +46,22 @@ Page({
       }
     })
   },
+  contactService:function(){
+    wx.makePhoneCall({
+      phoneNumber: this.data.phone,
+    })
+  },
+  copyWechat:function(){
+    wx.setClipboardData({
+      data: this.data.wechat,
+      success:function(res){
+        wx.showModal({
+          title: '提示',
+          content: '客服微信已复制,请前去粘贴搜索',
+          showCancel:false,
+          confirmColor:'#f4c600'
+        })
+      }
+    })
+  }
 })
