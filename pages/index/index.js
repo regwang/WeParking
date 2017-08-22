@@ -12,7 +12,8 @@ Page({
     userStatus:0,
     latitude: 39.91543309328607,
     longitude: 116.45597668647765,
-    countDown:60
+    countDown:60,
+    intervalId:0
   },
   onLoad: function () {
     if (wx.canIUse('getSystemInfoSync.return.SDKVersion')) {
@@ -151,6 +152,7 @@ Page({
           }else{
             that.getShareOrder()
           }
+          that.freshShareOrder()
         } else {
           wx.showToast({
             title: '出错了',
@@ -162,13 +164,16 @@ Page({
     })
   },
 
-  // //30秒刷新一次一次倒计时
-  // freshShareOrder:function(){
-  //   var that=this;
-  //   setTimeout(function(){
-  //     that.getShareOrder()
-  //   },1000*30)
-  // },
+  //30秒刷新一次一次倒计时
+  freshShareOrder:function(){
+    var that=this;
+    var intervalId=setInterval(function(){
+      that.getShareOrder()
+    },1000*30)
+    that.setData({
+      intervalId:intervalId
+    })
+  },
 
 
   //获得可预约订单并标记
@@ -558,7 +563,6 @@ Page({
     this.setData({
       countDown: 60
     })
-    // this.showPending()
-    // this.getShareOrder()
+    clearInterval(this.data.intervalId)
   }
 })
