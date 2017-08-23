@@ -152,7 +152,7 @@ Page({
           }else{
             that.getShareOrder()
           }
-          that.freshShareOrder()
+          // that.freshShareOrder()
         } else {
           wx.showToast({
             title: '出错了',
@@ -595,6 +595,6 @@ Page({
     this.setData({
       countDown: 60
     })
-    clearInterval(this.data.intervalId)
+    // clearInterval(this.data.intervalId)
   }
 })
