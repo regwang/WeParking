@@ -178,7 +178,6 @@ Page({
 
   //获得可预约订单并标记
   getShareOrder:function(){
-    var that=this
     //获得地图范围
     var that = this
     this.mapContext.getRegion({
@@ -209,6 +208,40 @@ Page({
             }
           }
         })
+      },
+      //用户微信版本不支持获得地图范围
+      fail:function(){
+        //获得地图中心经纬度
+        that.mapContext.getCenterLocation({
+          success:function(res){
+            wx.request({
+              url: app.globalData.serverUrl + 'getSharingOrder.als',
+              data:
+              {
+                token: wx.getStorageSync('token'),
+                min: that.data.countDown,
+                southwestLatitude: res.latitude-0.01,
+                southwestLongitude: res.longitude-0.01,
+                northeastLatitude: res.latitude+0.01,
+                northeastLongitude: res.longitude+0.01
+              },
+              success: function (res) {
+                if (res.data.status == 0) {
+                  that.setData({
+                    markers: res.data.orders
+                  })
+                  // that.freshShareOrder()
+                } else {
+                  wx.showToast({
+                    title: '出错了',
+                    icon: 'loading',
+                    duration: 1000
+                  })
+                }
+              }
+            })
+          }
+        })
       }
     })
    
@@ -223,7 +256,6 @@ Page({
 
   //点击某个车位图标时触发
   markertap:function(e){
-    console.log('来了')
     wx.navigateTo({
       url: '/pages/bookInfo/bookInfo?orderId='+e.markerId,
     })
