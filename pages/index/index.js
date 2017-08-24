@@ -178,73 +178,76 @@ Page({
 
   //获得可预约订单并标记
   getShareOrder:function(){
-    //获得地图范围
     var that = this
-    this.mapContext.getRegion({
-      success: function (res) {
-        wx.request({
-          url: app.globalData.serverUrl + 'getSharingOrder.als',
-          data:
-          {
-            token: wx.getStorageSync('token'),
-            min: that.data.countDown,
-            southwestLatitude: res.southwest.latitude,
-            southwestLongitude: res.southwest.longitude,
-            northeastLatitude: res.northeast.latitude,
-            northeastLongitude: res.northeast.longitude
-          },
-          success: function (res) {
-            if (res.data.status == 0) {
-              that.setData({
-                markers: res.data.orders
-              })
-              // that.freshShareOrder()
-            } else {
-              wx.showToast({
-                title: '出错了',
-                icon: 'loading',
-                duration:1000
-              })
-            }
-          }
-        })
-      },
-      //用户微信版本不支持获得地图范围
-      fail:function(){
-        //获得地图中心经纬度
-        that.mapContext.getCenterLocation({
-          success:function(res){
-            wx.request({
-              url: app.globalData.serverUrl + 'getSharingOrder.als',
-              data:
-              {
-                token: wx.getStorageSync('token'),
-                min: that.data.countDown,
-                southwestLatitude: res.latitude-0.01,
-                southwestLongitude: res.longitude-0.01,
-                northeastLatitude: res.latitude+0.01,
-                northeastLongitude: res.longitude+0.01
-              },
-              success: function (res) {
-                if (res.data.status == 0) {
-                  that.setData({
-                    markers: res.data.orders
-                  })
-                  // that.freshShareOrder()
-                } else {
-                  wx.showToast({
-                    title: '出错了',
-                    icon: 'loading',
-                    duration: 1000
-                  })
-                }
+    if (wx.canIUse('mapContext.getRegion')){
+      //获得地图范围
+      this.mapContext.getRegion({
+        success: function (res) {
+          wx.request({
+            url: app.globalData.serverUrl + 'getSharingOrder.als',
+            data:
+            {
+              token: wx.getStorageSync('token'),
+              min: that.data.countDown,
+              southwestLatitude: res.southwest.latitude,
+              southwestLongitude: res.southwest.longitude,
+              northeastLatitude: res.northeast.latitude,
+              northeastLongitude: res.northeast.longitude
+            },
+            success: function (res) {
+              if (res.data.status == 0) {
+                that.setData({
+                  markers: res.data.orders
+                })
+                // that.freshShareOrder()
+              } else {
+                wx.showToast({
+                  title: '出错了',
+                  icon: 'loading',
+                  duration: 1000
+                })
               }
-            })
-          }
-        })
-      }
-    })
-   
+            }
+          })
+        },
+        fail: function () {
+
+        }
+      })
+    }else{
+      //获得地图中心经纬度
+      that.mapContext.getCenterLocation({
+        success: function (res) {
+          wx.request({
+            url: app.globalData.serverUrl + 'getSharingOrder.als',
+            data:
+            {
+              token: wx.getStorageSync('token'),
+              min: that.data.countDown,
+              southwestLatitude: res.latitude - 2,
+              southwestLongitude: res.longitude - 2,
+              northeastLatitude: res.latitude + 2,
+              northeastLongitude: res.longitude + 2
+            },
+            success: function (res) {
+              if (res.data.status == 0) {
+                that.setData({
+                  markers: res.data.orders
+                })
+                // that.freshShareOrder()
+              } else {
+                wx.showToast({
+                  title: '出错了',
+                  icon: 'loading',
+                  duration: 1000
+                })
+              }
+            }
+          })
+        }
+      })
+    }
+    
   },
 
   //用户移动地图时触发
