@@ -51,10 +51,20 @@ Page({
         userInfo: userInfo
       })
     })
+
+    //如果未更新成功用户昵称,在此再更新一次
+    if(app.globalData.isupdate==0){
+      app.updateUserInfo(this.data.userInfo)
+    }
+
   },
 
   onShow: function () {
-    
+    if (app.globalData.useStatus!=0){
+      wx.showLoading({
+        title: '加载中..',
+      })
+    }
   },
 
   getMyOrder:function(){

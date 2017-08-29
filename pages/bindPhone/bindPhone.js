@@ -21,7 +21,7 @@ Page({
     
   },
   onShow:function(){
-    if (!app.globalData.orderInfo) {
+    if (!app.globalData.userInfo) {
       wx.getSetting({
         success: function (res) {
           if(!res.authSetting['scope.userInfo']){

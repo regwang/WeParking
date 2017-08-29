@@ -3,32 +3,15 @@ var WeToast=require('/pages/wetoast/wetoast.js')
 App({
   WeToast,
   onLaunch: function() {
-    // //调用API从本地缓存中获取数据
-    // var logs = wx.getStorageSync('logs') || []
-    // logs.unshift(Date.now())
-    // wx.setStorageSync('logs', logs)
-    // console.log('app onlaunch')
-    // var that=this
-    // var hasToken=true
-    // try{
-    //   var value = wx.getStorageSync('token')
-    //   if (!value) {
-    //     hasToken=false
-    //   }
-    // }catch(e){}
-    // if(hasToken){
-    //   wx.checkSession({
-    //     success: function () {
-    //       console.log('islogin')
-    //     },
-    //     fail: function () {
-    //         console.log('notlogin')
-    //         that.doLogin()
-    //     }
-    //   })
-    // }else{
-    //   that.doLogin()
-    // }
+    var that=this
+    wx.request({
+      url: this.globalData.serverUrl +'getIsUsed.als',
+      success:function(res){
+        if (res.data.status!=0 && res.data.status!=-1){
+          this.globalData.useStatus=1
+        }
+      }
+    })
   },
 
   doLogin:function(){
@@ -66,6 +49,8 @@ App({
           wx.showToast({
             title: '出错了',
           })
+        }else if(res.data.status==0){
+          that.globalData.isupdate=1
         }
       }
     })
@@ -89,5 +74,7 @@ App({
   globalData: {
     userInfo: null,
     serverUrl:"https://www.rankyoo.com/srimplApp/",
+    isupdate:0,
+    useStatus:0
   }
 })

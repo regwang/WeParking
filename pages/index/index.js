@@ -60,24 +60,46 @@ Page({
     this.mapContext = wx.createMapContext('map')
   },
 
-  onShow:function () { 
+  onShow:function () {
     var that = this
-    wx.showLoading({
-      title: '加载中..'
-    })
-    var hasToken = true
-    try {
-      var value = wx.getStorageSync('token')
-      if (!value) {
-        hasToken = false
-      }
-    } catch (e) { }
-    if (hasToken) {
-      wx.checkSession({
-        success: function () {
-          that.checkUserBookingStatus()
-        },
-        fail: function () {
+    if (app.globalData.useStatus==0){
+        wx.showLoading({
+          title: '加载中..'
+        })
+        var hasToken = true
+        try {
+          var value = wx.getStorageSync('token')
+          if (!value) {
+            hasToken = false
+          }
+        } catch (e) { }
+        if (hasToken) {
+          wx.checkSession({
+            success: function () {
+              that.checkUserBookingStatus()
+            },
+            fail: function () {
+              wx.login({
+                success: function (res) {
+                  if (res.code) {
+                    wx.request({
+                      url: app.globalData.serverUrl + 'onLogin.als',
+                      data: { code: res.code },
+                      success: function (res2) {
+                        if (res2.data.status == 0) {
+                          try {
+                            wx.setStorageSync('token', res2.data.token)
+                            that.checkUserBookingStatus()
+                          } catch (e) { }
+                        }
+                      }
+                    })
+                  }
+                }
+              })
+            }
+          })
+        } else {
           wx.login({
             success: function (res) {
               if (res.code) {
@@ -97,25 +119,9 @@ Page({
             }
           })
         }
-      })
-    } else {
-      wx.login({
-        success: function (res) {
-          if (res.code) {
-            wx.request({
-              url: app.globalData.serverUrl + 'onLogin.als',
-              data: { code: res.code },
-              success: function (res2) {
-                if (res2.data.status == 0) {
-                  try {
-                    wx.setStorageSync('token', res2.data.token)
-                    that.checkUserBookingStatus()
-                  } catch (e) { }
-                }
-              }
-            })
-          }
-        }
+    }else{
+      wx.showLoading({
+        title: '加载中..'
       })
     }
   },

@@ -81,56 +81,62 @@ Page({
   },
   onShow: function () {
     var that = this
-    wx.showLoading({
-      title: '加载中..'
-    })
-    wx.request({
-      url: app.globalData.serverUrl + 'getUserShareStatus.als',
-      data: { token: wx.getStorageSync('token') },
-      success: function (res) {
-        wx.hideLoading()
-        //未绑定手机
-        if (res.data.status == 1) {
-          wx.redirectTo({
-            url: '/pages/bindPhone/bindPhone'
-          })
-        } else if (res.data.status == 2) { //该用户尚未设置车辆信息 
-          that.setData({
-            shareStatus:2
-          })
-        } else if (res.data.status == 3) { //该用户当前有共享的订单
-          that.setData({
-            shareStatus:3
-          })
-          that.showOrderBtn()
-          that.getUserLocation()
-        } else if(res.data.status==4){    //该用户当前没有共享的订单
-          that.setData({
-            shareStatus:4,
-            includePoints: [],            
-          })
-        }else {
-          wx.showToast({
-            title: '出错了',
-            icon: "loading",
-            duration: 1000
+    if (app.globalData.useStatus==0){
+      wx.showLoading({
+        title: '加载中..'
+      })
+      wx.request({
+        url: app.globalData.serverUrl + 'getUserShareStatus.als',
+        data: { token: wx.getStorageSync('token') },
+        success: function (res) {
+          wx.hideLoading()
+          //未绑定手机
+          if (res.data.status == 1) {
+            wx.redirectTo({
+              url: '/pages/bindPhone/bindPhone'
+            })
+          } else if (res.data.status == 2) { //该用户尚未设置车辆信息 
+            that.setData({
+              shareStatus:2
+            })
+          } else if (res.data.status == 3) { //该用户当前有共享的订单
+            that.setData({
+              shareStatus:3
+            })
+            that.showOrderBtn()
+            that.getUserLocation()
+          } else if(res.data.status==4){    //该用户当前没有共享的订单
+            that.setData({
+              shareStatus:4,
+              includePoints: [],            
+            })
+          }else {
+            wx.showToast({
+              title: '出错了',
+              icon: "loading",
+              duration: 1000
+            })
+          }
+        },
+        fail:function(){
+          wx.showModal({
+            title: '提示',
+            content: '网络不太通畅,请稍后再试',
+            showCancel:false,
+            confirmColor:'#f4c600',
+            success:function(res){
+              if(res.confirm){
+                
+              }
+            }
           })
         }
-      },
-      fail:function(){
-        wx.showModal({
-          title: '提示',
-          content: '网络不太通畅,请稍后再试',
-          showCancel:false,
-          confirmColor:'#f4c600',
-          success:function(res){
-            if(res.confirm){
-              
-            }
-          }
-        })
-      }
-    })
+      })
+    }else{
+      wx.showLoading({
+        title: '加载中..'
+      })
+    }
   },
 
   //定位按钮点击事件
