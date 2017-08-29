@@ -55,6 +55,14 @@ Page({
         }
       })
     }
+    wx.request({
+      url: app.globalData.serverUrl + 'getIsUsed.als',
+      success: function (res) {
+        if (res.data.isUsed != 0) {
+          app.globalData.useStatus = 1
+        }
+      }
+    })
   },
   onReady: function () {
     this.mapContext = wx.createMapContext('map')
@@ -122,6 +130,10 @@ Page({
     }else{
       wx.showLoading({
         title: '加载中..'
+      })
+      that.setData({
+        controls: [],
+        markers: []
       })
     }
   },

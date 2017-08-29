@@ -3,15 +3,7 @@ var WeToast=require('/pages/wetoast/wetoast.js')
 App({
   WeToast,
   onLaunch: function() {
-    var that=this
-    wx.request({
-      url: this.globalData.serverUrl +'getIsUsed.als',
-      success:function(res){
-        if (res.data.status!=0 && res.data.status!=-1){
-          this.globalData.useStatus=1
-        }
-      }
-    })
+    
   },
 
   doLogin:function(){
@@ -46,11 +38,9 @@ App({
       data:{token:wx.getStorageSync('token'),nickName:userInfo.nickName},
       success:function(res){
         if(res.data.status==-1){
-          wx.showToast({
-            title: '出错了',
-          })
-        }else if(res.data.status==0){
-          that.globalData.isupdate=1
+          // wx.showToast({
+          //   title: '出错了',
+          // })
         }
       }
     })
