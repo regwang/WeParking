@@ -62,7 +62,7 @@ Page({
     this.setData({
       latitude: this.data.orderInfo.latitude,
       longitude: this.data.orderInfo.longitude,
-      markers: [{ latitude:this.data.orderInfo.latitude, longitude: this.data.orderInfo.longitude, iconPath: '/icon/parking.png', width: 45, height: 58 }]
+      markers: [{ latitude:this.data.orderInfo.latitude, longitude: this.data.orderInfo.longitude, iconPath: '/icon/parking.png', width: 45, height: 74 }]
     })
   },
 })
