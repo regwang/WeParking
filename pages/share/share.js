@@ -110,6 +110,7 @@ Page({
               shareStatus:4,
               includePoints: [],            
             })
+            that.getShareLocation()         //获得定位,用于当用户共享车位时,比较用户当前位置和共享车位的位置之间的距离
           }else {
             wx.showToast({
               title: '出错了',
@@ -172,6 +173,7 @@ Page({
       }
     })
   },
+
   getLocation: function () {
     var that = this
     wx.getLocation({
@@ -190,6 +192,21 @@ Page({
     })
   },
 
+  getShareLocation: function(){
+    var that = this
+    wx.getLocation({
+      type: 'gcj02',
+      success: function (res) {
+        that.setData({
+          latitude: res.latitude,
+          longitude: res.longitude
+        })
+      },
+      fail: function () {
+        
+      }
+    })
+  },
 
   //获得用户订单信息
   getUserOrderMark: function (latitude, longitude) {
@@ -371,13 +388,30 @@ Page({
     var that=this
     wx.chooseLocation({
       success: function(res) {
-        that.setData({
-          chooseMapText:res.name+";"+res.address,
-          shareName: res.name,
-          shareAddress: res.address,
-          shareLatitude: res.latitude,
-          shareLongitude: res.longitude
-        })
+        var distance = app.getDistance(that.data.latitude, that.data.longitude, res.latitude, res.longitude)
+        //检查用户选取的位置经纬度和用户当前位置经纬度的距离,如果大于3千米,该位置无效
+        if (distance>3){
+          wx.showModal({
+            title: '提示',
+            content: '您选择的车位位置,与您当前的位置距离过远,请重新选择',
+            showCancel:false,
+            confirmColor:'#f4c600',
+            success:function(res){
+
+            }
+          })
+          that.setData({
+            chooseMapText: "点击此处标记您车位的位置"
+          })
+        }else{
+          that.setData({
+            chooseMapText:res.name+";"+res.address,
+            shareName: res.name,
+            shareAddress: res.address,
+            shareLatitude: res.latitude,
+            shareLongitude: res.longitude
+          })
+        }
       },
       cancel:function(){
         that.setData({

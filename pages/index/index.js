@@ -201,32 +201,39 @@ Page({
       //获得地图范围
       this.mapContext.getRegion({
         success: function (res) {
-          wx.request({
-            url: app.globalData.serverUrl + 'getSharingOrder.als',
-            data:
-            {
-              token: wx.getStorageSync('token'),
-              min: that.data.countDown,
-              southwestLatitude: res.southwest.latitude,
-              southwestLongitude: res.southwest.longitude,
-              northeastLatitude: res.northeast.latitude,
-              northeastLongitude: res.northeast.longitude
-            },
-            success: function (res) {
-              if (res.data.status == 0) {
-                that.setData({
-                  markers: res.data.orders
-                })
-                // that.freshShareOrder()
-              } else {
-                wx.showToast({
-                  title: '出错了',
-                  icon: 'loading',
-                  duration: 1000
-                })
+          //检查地图范围,如果超出用户当前位置30公里,不再获取数据
+          var distance1 = app.getDistance(that.data.latitude, that.data.longitude, res.southwest.latitude, res.southwest.longitude)
+          var distance2 = app.getDistance(that.data.latitude, that.data.longitude, res.northeast.latitude, res.northeast.longitude)
+          if(distance1>30 || distance2>30){
+
+          }else{
+            wx.request({
+              url: app.globalData.serverUrl + 'getSharingOrder.als',
+              data:
+              {
+                token: wx.getStorageSync('token'),
+                min: that.data.countDown,
+                southwestLatitude: res.southwest.latitude,
+                southwestLongitude: res.southwest.longitude,
+                northeastLatitude: res.northeast.latitude,
+                northeastLongitude: res.northeast.longitude
+              },
+              success: function (res) {
+                if (res.data.status == 0) {
+                  that.setData({
+                    markers: res.data.orders
+                  })
+                  // that.freshShareOrder()
+                } else {
+                  wx.showToast({
+                    title: '出错了',
+                    icon: 'loading',
+                    duration: 1000
+                  })
+                }
               }
-            }
-          })
+            })
+          }
         },
         fail: function () {
 
@@ -242,10 +249,10 @@ Page({
             {
               token: wx.getStorageSync('token'),
               min: that.data.countDown,
-              southwestLatitude: res.latitude - 2,
-              southwestLongitude: res.longitude - 2,
-              northeastLatitude: res.latitude + 2,
-              northeastLongitude: res.longitude + 2
+              southwestLatitude: that.data.latitude - 0.3,
+              southwestLongitude: that.data.longitude - 0.3,
+              northeastLatitude: that.data.latitude + 0.3,
+              northeastLongitude: that.data.longitude + 0.3
             },
             success: function (res) {
               if (res.data.status == 0) {
@@ -456,19 +463,19 @@ Page({
           {
             id: "chooseTime_15",
             iconPath: "/icon/min_choose_15.png",
-            position: { left: (that.data.windowWidth - 90 - 10), top: that.data.windowHeight - 80, width: 90, height: 45 },
+            position: { left: (that.data.windowWidth - 92 - 10), top: that.data.windowHeight - 80, width: 92, height: 50 },
             clickable: true
           },
           {
             id: "chooseTime_10",
             iconPath: "/icon/min_choose_10.png",
-            position: { left: (that.data.windowWidth - 90 - 10), top: that.data.windowHeight - 80-47, width: 90, height: 45 },
+            position: { left: (that.data.windowWidth - 92 - 10), top: that.data.windowHeight - 80-52, width: 92, height: 50 },
             clickable: true
           },
           {
             id: "chooseTime_5",
             iconPath: "/icon/min_choose_5.png",
-            position: { left: (that.data.windowWidth - 90 - 10), top: that.data.windowHeight - 80 - 47-47, width: 90, height: 45 },
+            position: { left: (that.data.windowWidth - 92 - 10), top: that.data.windowHeight - 80 - 52-52, width: 92, height: 50 },
             clickable: true
           }
           // ,
@@ -492,19 +499,19 @@ Page({
           {
             id: "chooseTime_15",
             iconPath: "/icon/min_choose_15.png",
-            position: { left: (that.data.windowWidth - 90 - 10), top: that.data.windowHeight - 80, width: 90, height: 45 },
+            position: { left: (that.data.windowWidth - 92 - 10), top: that.data.windowHeight - 80, width: 92, height: 50 },
             clickable: true
           },
           {
             id: "chooseTime_10",
             iconPath: "/icon/min_choose_10.png",
-            position: { left: (that.data.windowWidth - 90 - 10), top: that.data.windowHeight - 80 - 47, width: 90, height: 45 },
+            position: { left: (that.data.windowWidth - 92 - 10), top: that.data.windowHeight - 80 - 52, width: 92, height: 50 },
             clickable: true
           },
           {
             id: "chooseTime_5",
             iconPath: "/icon/min_choose_5_on.png",
-            position: { left: (that.data.windowWidth - 90 - 10), top: that.data.windowHeight - 80 - 47 - 47, width: 90, height: 45 },
+            position: { left: (that.data.windowWidth - 92 - 10), top: that.data.windowHeight - 80 - 52 - 52, width: 92, height: 50 },
             clickable: true
           }
           // ,
@@ -528,19 +535,19 @@ Page({
           {
             id: "chooseTime_15",
             iconPath: "/icon/min_choose_15.png",
-            position: { left: (that.data.windowWidth - 90 - 10), top: that.data.windowHeight - 80, width: 90, height: 45 },
+            position: { left: (that.data.windowWidth - 92 - 10), top: that.data.windowHeight - 80, width: 92, height: 50 },
             clickable: true
           },
           {
             id: "chooseTime_10",
             iconPath: "/icon/min_choose_10_on.png",
-            position: { left: (that.data.windowWidth - 90 - 10), top: that.data.windowHeight - 80 - 47, width: 90, height: 45 },
+            position: { left: (that.data.windowWidth - 92 - 10), top: that.data.windowHeight - 80 - 52, width: 92, height: 50 },
             clickable: true
           },
           {
             id: "chooseTime_5",
             iconPath: "/icon/min_choose_5.png",
-            position: { left: (that.data.windowWidth - 90 - 10), top: that.data.windowHeight - 80 - 47 - 47, width: 90, height: 45 },
+            position: { left: (that.data.windowWidth - 92 - 10), top: that.data.windowHeight - 80 - 52 - 52, width: 92, height: 50 },
             clickable: true
           }
           // ,
@@ -564,19 +571,19 @@ Page({
           {
             id: "chooseTime_15",
             iconPath: "/icon/min_choose_15_on.png",
-            position: { left: (that.data.windowWidth - 90 - 10), top: that.data.windowHeight - 80, width: 90, height: 45 },
+            position: { left: (that.data.windowWidth - 92 - 10), top: that.data.windowHeight - 80, width: 92, height: 50 },
             clickable: true
           },
           {
             id: "chooseTime_10",
             iconPath: "/icon/min_choose_10.png",
-            position: { left: (that.data.windowWidth - 90 - 10), top: that.data.windowHeight - 80 - 47, width: 90, height: 45 },
+            position: { left: (that.data.windowWidth - 92 - 10), top: that.data.windowHeight - 80 - 52, width: 92, height: 50 },
             clickable: true
           },
           {
             id: "chooseTime_5",
             iconPath: "/icon/min_choose_5.png",
-            position: { left: (that.data.windowWidth - 90 - 10), top: that.data.windowHeight - 80 - 47 - 47, width: 90, height: 45 },
+            position: { left: (that.data.windowWidth - 92 - 10), top: that.data.windowHeight - 80 - 52 - 52, width: 92, height: 50 },
             clickable: true
           }
           // ,
