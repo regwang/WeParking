@@ -279,27 +279,47 @@ Page({
   bindCar: function () {
     var carNumber = this.data.carNumber
     var carColor = this.data.carColor
+    var verify = /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}[A-Z0-9]{4}[A-Z0-9挂学警港澳]{1}$/u
     if (carNumber.length == 0) {
       wx.showToast({
         title: '请输入车牌号',
         icon: 'loading',
         duration: 1000
       })
-    } else if (carColor.length == 0) {
+    }else if(!verify.test(carNumber)){
       wx.showToast({
-        title: '请输入车辆颜色',
+        title: '车牌号不正确',
+        icon: 'loading',
+        duration: 1000
+      })
+    }else if (carColor.length == 0) {
+      wx.showToast({
+        title: '请输入颜色',
         icon: 'loading',
         duration: 1000
       })
     } else {
       var that = this
+      wx.showLoading({
+        title: '请稍候..',
+      })
       wx.request({
         url: app.globalData.serverUrl + 'bindCar.als',
         data: { token: wx.getStorageSync('token'), carNumber: carNumber, color: carColor },
         success: function (res) {
-          console.log(res.data)
+          wx.hideLoading()
           if (res.data.status == 0) {
-            that.onShow()
+            wx.showModal({
+              title: '提示',
+              content: '提交成功',
+              showCancel:false,
+              confirmColor:'#f4c600',
+              success:function(res){
+                if(res.confirm){
+                  that.onShow()
+                }
+              }
+            })
           } else {
             wx.showToast({
               title: '出错了',
@@ -309,6 +329,7 @@ Page({
           }
         },
         fail: function () {
+          wx.hideLoading()
           wx.showToast({
             title: '连接错误',
             icon: 'loading',

@@ -8,7 +8,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    accountSource:['微信','支付宝','工商银行','建设银行','交通银行','中国银行','民生银行','农业银行','招商银行','光大银行','中信银行','浦发银行','人民银行'],
+    accountSource:['微信','支付宝','工商银行','建设银行','交通银行','中国银行','民生银行','农业银行','招商银行','光大银行','中信银行','浦发银行','人民银行','其它'],
     selectedItem:0,
     selectedText:'选择您的开户机构',
     selectedTextClass:'hint_text',
@@ -76,7 +76,7 @@ Page({
           if(res.data.status==0){
             wx.showModal({
               title: '提示',
-              content: '绑定成功',
+              content: '提交成功',
               showCancel:false,
               confirmColor:'#f4c600',
               success:function(res){

@@ -105,7 +105,10 @@ Page({
         title: '提示',
         content: '您目前没有余额,无需提现',
         showCancel:false,
-        confirmColor:'#f4c600'
+        confirmColor:'#f4c600',
+        success:function(res){
+          
+        }
       })
     }else{
       wx.showModal({
@@ -128,7 +131,10 @@ Page({
                     title: '提示',
                     content: '提现申请成功,请耐心等待后台打款.',
                     showCancel: false,
-                    confirmColor: '#f4c600'
+                    confirmColor: '#f4c600',
+                    success:function(res){
+
+                    }
                   })
                   that.setData({
                     pageIndex: 1,
