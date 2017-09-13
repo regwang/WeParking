@@ -110,6 +110,16 @@ Page({
           
         }
       })
+    } else if (this.data.balance < 10){
+      wx.showModal({
+        title: '提示',
+        content: '余额满10元才可提现,请后续再试',
+        showCancel: false,
+        confirmColor: '#f4c600',
+        success: function (res) {
+
+        }
+      })
     }else{
       wx.showModal({
         title: '提示',
@@ -166,7 +176,10 @@ Page({
                   title: '提示',
                   content: '网络不太顺畅,请稍后再试',
                   showCancel: false,
-                  confirmColor: '#f4c600'
+                  confirmColor: '#f4c600',
+                  success:function(res){
+
+                  }
                 })
               }
             })
