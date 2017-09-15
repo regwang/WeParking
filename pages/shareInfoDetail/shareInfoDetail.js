@@ -257,7 +257,7 @@ Page({
     } else if (order.status == 4) {
       this.setData({
         orderInfo: order,
-        orderStatusText: '待支付'
+        orderStatusText: '待收款'
       })
     } else if (order.status == 5) {
       this.setData({

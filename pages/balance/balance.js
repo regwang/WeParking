@@ -113,7 +113,7 @@ Page({
     } else if (this.data.balance < 10){
       wx.showModal({
         title: '提示',
-        content: '余额满10元才可提现,请后续再试',
+        content: '余额满10元就可以提现咯,加油~~~',
         showCancel: false,
         confirmColor: '#f4c600',
         success: function (res) {
