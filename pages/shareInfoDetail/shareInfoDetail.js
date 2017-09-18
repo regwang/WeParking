@@ -85,6 +85,7 @@ Page({
 
   //取消共享
   cancleShare:function(){
+    var that=this
     wx.showModal({
       title: '提示',
       content: '确定取消共享吗?',

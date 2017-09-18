@@ -45,7 +45,7 @@ Page({
                       wx.openSetting({
                         success: function (res) {
                           if (!res.authSetting['scope.userInfo']){
-                            that.onShow()
+                            // that.onShow()
                           }else{
                             //授权成功,更新用户昵称信息
                             app.getUserInfo(function (userInfo) {

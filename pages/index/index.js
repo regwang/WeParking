@@ -55,6 +55,9 @@ Page({
         }
       })
     }
+
+    this.mapContext = wx.createMapContext('map')
+
     wx.request({
       url: app.globalData.serverUrl + 'getIsUsed.als',
       success: function (res) {
@@ -65,7 +68,7 @@ Page({
     })
   },
   onReady: function () {
-    this.mapContext = wx.createMapContext('map')
+    // this.mapContext = wx.createMapContext('map')
   },
 
   onShow:function () {
@@ -199,7 +202,7 @@ Page({
     var that = this
     if (wx.canIUse('mapContext.getRegion')){
       //获得地图范围
-      this.mapContext.getRegion({
+      that.mapContext.getRegion({
         success: function (res) {
           //检查地图范围,如果超出用户当前位置30公里,不再获取数据
           var distance1 = app.getDistance(that.data.latitude, that.data.longitude, res.southwest.latitude, res.southwest.longitude)
