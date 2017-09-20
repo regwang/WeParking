@@ -454,31 +454,32 @@ Page({
   //显示待预约状态时,地图界面显示的按钮
   showPending:function(){
     var that = this
+    var res = wx.getSystemInfoSync()
     if (that.data.countDown==60){
       that.setData({
         controls: [
           {
             id: "currentLocation",
             iconPath: "/icon/location.png",
-            position: { left: 10, top: that.data.windowHeight - 80, width: 45, height: 45 },
+            position: { left: 10, top: res.windowHeight - 80, width: 45, height: 45 },
             clickable: true
           },
           {
             id: "chooseTime_15",
             iconPath: "/icon/min_choose_15.png",
-            position: { left: (that.data.windowWidth - 83 - 10), top: that.data.windowHeight - 80, width: 83, height: 45 },
+            position: { left: (that.data.windowWidth - 83 - 10), top: res.windowHeight - 80, width: 83, height: 45 },
             clickable: true
           },
           {
             id: "chooseTime_10",
             iconPath: "/icon/min_choose_10.png",
-            position: { left: (that.data.windowWidth - 83 - 10), top: that.data.windowHeight - 80-47, width: 83, height: 45 },
+            position: { left: (that.data.windowWidth - 83 - 10), top: res.windowHeight - 80 -47, width: 83, height: 45 },
             clickable: true
           },
           {
             id: "chooseTime_5",
             iconPath: "/icon/min_choose_5.png",
-            position: { left: (that.data.windowWidth - 83 - 10), top: that.data.windowHeight - 80 - 47-47, width: 83, height: 45 },
+            position: { left: (that.data.windowWidth - 83 - 10), top: res.windowHeight - 80 - 47-47, width: 83, height: 45 },
             clickable: true
           }
           // ,
@@ -496,25 +497,25 @@ Page({
           {
             id: "currentLocation",
             iconPath: "/icon/location.png",
-            position: { left: 10, top: that.data.windowHeight - 80, width: 45, height: 45 },
+            position: { left: 10, top: res.windowHeight - 80, width: 45, height: 45 },
             clickable: true
           },
           {
             id: "chooseTime_15",
             iconPath: "/icon/min_choose_15.png",
-            position: { left: (that.data.windowWidth - 83 - 10), top: that.data.windowHeight - 80, width: 83, height: 45 },
+            position: { left: (that.data.windowWidth - 83 - 10), top: res.windowHeight - 80, width: 83, height: 45 },
             clickable: true
           },
           {
             id: "chooseTime_10",
             iconPath: "/icon/min_choose_10.png",
-            position: { left: (that.data.windowWidth - 83 - 10), top: that.data.windowHeight - 80 - 47, width: 83, height: 45 },
+            position: { left: (that.data.windowWidth - 83 - 10), top: res.windowHeight - 80 - 47, width: 83, height: 45 },
             clickable: true
           },
           {
             id: "chooseTime_5",
             iconPath: "/icon/min_choose_5_on.png",
-            position: { left: (that.data.windowWidth - 83 - 10), top: that.data.windowHeight - 80 - 47 - 47, width: 83, height: 45 },
+            position: { left: (that.data.windowWidth - 83 - 10), top: res.windowHeight - 80 - 47 - 47, width: 83, height: 45 },
             clickable: true
           }
           // ,
@@ -532,25 +533,25 @@ Page({
           {
             id: "currentLocation",
             iconPath: "/icon/location.png",
-            position: { left: 10, top: that.data.windowHeight - 80, width: 45, height: 45 },
+            position: { left: 10, top: res.windowHeight - 80, width: 45, height: 45 },
             clickable: true
           },
           {
             id: "chooseTime_15",
             iconPath: "/icon/min_choose_15.png",
-            position: { left: (that.data.windowWidth - 83 - 10), top: that.data.windowHeight - 80, width: 83, height: 45 },
+            position: { left: (that.data.windowWidth - 83 - 10), top: res.windowHeight - 80, width: 83, height: 45 },
             clickable: true
           },
           {
             id: "chooseTime_10",
             iconPath: "/icon/min_choose_10_on.png",
-            position: { left: (that.data.windowWidth - 83 - 10), top: that.data.windowHeight - 80 - 47, width: 83, height: 45 },
+            position: { left: (that.data.windowWidth - 83 - 10), top: res.windowHeight - 80 - 47, width: 83, height: 45 },
             clickable: true
           },
           {
             id: "chooseTime_5",
             iconPath: "/icon/min_choose_5.png",
-            position: { left: (that.data.windowWidth - 83 - 10), top: that.data.windowHeight - 80 - 47 - 47, width: 83, height: 45 },
+            position: { left: (that.data.windowWidth - 83 - 10), top: res.windowHeight - 80 - 47 - 47, width: 83, height: 45 },
             clickable: true
           }
           // ,
@@ -568,25 +569,25 @@ Page({
           {
             id: "currentLocation",
             iconPath: "/icon/location.png",
-            position: { left: 10, top: that.data.windowHeight - 80, width: 45, height: 45 },
+            position: { left: 10, top: res.windowHeight - 80, width: 45, height: 45 },
             clickable: true
           },
           {
             id: "chooseTime_15",
             iconPath: "/icon/min_choose_15_on.png",
-            position: { left: (that.data.windowWidth - 83 - 10), top: that.data.windowHeight - 80, width: 83, height: 45 },
+            position: { left: (that.data.windowWidth - 83 - 10), top: res.windowHeight - 80, width: 83, height: 45 },
             clickable: true
           },
           {
             id: "chooseTime_10",
             iconPath: "/icon/min_choose_10.png",
-            position: { left: (that.data.windowWidth - 83 - 10), top: that.data.windowHeight - 80 - 47, width: 83, height: 45 },
+            position: { left: (that.data.windowWidth - 83 - 10), top: res.windowHeight - 80 - 47, width: 83, height: 45 },
             clickable: true
           },
           {
             id: "chooseTime_5",
             iconPath: "/icon/min_choose_5.png",
-            position: { left: (that.data.windowWidth - 83 - 10), top: that.data.windowHeight - 80 - 47 - 47, width: 83, height: 45 },
+            position: { left: (that.data.windowWidth - 83 - 10), top: res.windowHeight - 80 - 47 - 47, width: 83, height: 45 },
             clickable: true
           }
           // ,
@@ -620,6 +621,12 @@ Page({
     })
     
   },
+
+  //计算按钮偏移量
+  calFirstTop:function(){
+    return (this.data.windowHeight/1110)*150
+  },
+
   onHide:function(){
     this.setData({
       countDown: 60
